@@ -1,7 +1,8 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import { Button, Text, View } from 'react-native';
 
-export const HomeScreen = () => {
+export const HomeScreen = ({ navigation }) => {
+
   return (
     <View
       style={{
@@ -10,7 +11,7 @@ export const HomeScreen = () => {
         alignItems: 'center',
         backgroundColor: 'white',
       }}>
-      <Text> 首页</Text>
-    </View>
+      <Button onPress={() => navigation.navigate('Detail')} title='Go to Details'></Button>
+    </View >
   );
 };

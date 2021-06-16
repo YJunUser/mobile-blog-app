@@ -1,6 +1,6 @@
 import React from 'react';
 import SideMenu from 'react-native-side-menu-updated';
-import {Menu} from './menu';
+import { Menu } from './menu';
 
 export const Drawer = ({
   children,
