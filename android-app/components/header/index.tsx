@@ -1,15 +1,17 @@
 import React from "react";
 import { View, TouchableNativeFeedback, Text } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { useAuth } from "../../context/auth-context";
 
-type LogoTitleProps = {
-  setOpen: (state: { isOpen: boolean }) => void
-}
 
-export const Header = ({ setOpen }: LogoTitleProps) => {
+
+export const Header = () => {
+
+  const { setOpen } = useAuth()
+
   return (
     <View style={{}}>
-      <TouchableNativeFeedback onPress={() => setOpen({ isOpen: true })}>
+      <TouchableNativeFeedback onPress={() => setOpen({ open: true })}>
         <Text>
           <Icon name={'user-circle-o'} size={30} color={'gray'} />
         </Text>

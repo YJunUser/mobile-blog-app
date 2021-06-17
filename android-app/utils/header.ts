@@ -2,11 +2,12 @@ import { getFocusedRouteNameFromRoute, Route } from "@react-navigation/native";
 import { Header } from "../components/header";
 
 
-export function getHeaderTitle(route: Partial<Route<string, object>>, setOpen: ({ isOpen: boolean }) => void) {
+// 根据不同的路由导入不同的header
+export function getHeaderTitle(route: Partial<Route<string, object>>) {
   const routeName = getFocusedRouteNameFromRoute(route) ?? 'Home'
   switch (routeName) {
     case 'Home':
-      return () => Header({ setOpen });
+      return Header;
     case 'List':
       return 'list';
   }
