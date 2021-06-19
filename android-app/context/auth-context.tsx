@@ -1,13 +1,17 @@
 import React, { ReactNode, useState } from 'react'
 import { useMount } from '../utils';
 
+type UserLogin = {
+  username: string;
+  password: string;
+}
 
 interface ContextStore {
   user: {
     username: string;
     password: string;
   } | null; // null代表还没登陆
-  login: () => Promise<void>;
+  login: (UserLogin) => Promise<unknown>;
   logout: () => Promise<void>;
   register: () => Promise<void>;
   isOpen: { open: boolean };
@@ -26,10 +30,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // drawer open
   const [isOpen, setOpen] = useState({ open: false })
 
-
-
-
-  const login = () => { return Promise.resolve() }
+  const login = (values: UserLogin) => {
+    return new Promise((res, rej) => {
+      setTimeout(() => {
+        setUser({
+          username: 'yaobojun',
+          password: '123456'
+        })
+        res(null)
+      }, 1000);
+    })
+  }
   const logout = () => { return Promise.resolve() }
   const register = () => { return Promise.resolve() }
 

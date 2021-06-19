@@ -2,16 +2,13 @@ import { StyleSheet } from 'react-native'
 
 export const styles = StyleSheet.create({
   container: {
-    padding: 50,
+    padding: 40,
     alignItems: 'center',
-    height: '100%',
-    position: 'relative',
+    flex: 1,
     backgroundColor: 'white'
   },
   brief: {
     marginBottom: 30
   },
-  register: {
-    alignSelf: 'flex-end', fontSize: 12
-  }
+  buttonGroup: { flexDirection: 'row', justifyContent: "space-between", width: '95%' }
 })
