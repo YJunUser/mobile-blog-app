@@ -7,7 +7,7 @@ import { ListScreen } from './page/list';
 import { getHeaderTitle } from './utils/header';
 import { useAuth } from './context/auth-context';
 import { Suspense } from 'react';
-import { Text } from 'react-native'
+
 import FullPageLoading from './components/FullPageLoading';
 
 // lazy components
