@@ -1,17 +1,20 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { CardStyleInterpolators, createStackNavigator, } from '@react-navigation/stack';
 import React from 'react';
-import { View, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Drawer } from './components/drawer';
-import { HomeScreen } from './page/home';
 import { ListScreen } from './page/list';
 import { getHeaderTitle } from './utils/header';
 import { useAuth } from './context/auth-context';
-import { LoginScreen } from './page/unauth/login';
-import { RegisterScreen } from './page/unauth/register';
+import { Suspense } from 'react';
+import { Text } from 'react-native'
+import FullPageLoading from './components/FullPageLoading';
 
-
+// lazy components
+const HomeScreen = React.lazy(() => import('./page/home/index'))
+const LoginScreen = React.lazy(() => import('./page/unauth/login'))
+const RegisterScreen = React.lazy(() => import('./page/unauth/register'))
+const ProfileScreen = React.lazy(() => import('./page/profile/index'))
 
 // Tab-bar Screen
 const BottomTab = () => {
@@ -22,9 +25,9 @@ const BottomTab = () => {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName: string;
-          if (route.name === 'Home') {
+          if (route.name === 'HomeScreen') {
             iconName = focused ? 'file-text' : 'file-text';
-          } else if (route.name === 'List') {
+          } else if (route.name === 'ListScreen') {
             iconName = focused ? 'search' : 'search';
           }
           // You can return any component that you like here!
@@ -35,69 +38,69 @@ const BottomTab = () => {
         activeTintColor: 'tomato',
         inactiveTintColor: 'gray',
       }}>
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="List" component={ListScreen} />
+      <Tab.Screen name="HomeScreen" component={HomeScreen} />
+      <Tab.Screen name="ListScreen" component={ListScreen} />
     </Tab.Navigator>
   );
 };
-
-const Detail = () => {
-  return <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    <Text>Detail</Text>
-  </View>
-}
 
 
 
 // Main 
 const Stack = createStackNavigator(
+
 );
 
 export const AndroidApp = () => {
   const { user } = useAuth()
-
   return (
     <>
       {
-        user ? (<Drawer>
-          <Stack.Navigator>
+        user ? (
+          <Suspense fallback={<FullPageLoading></FullPageLoading>}>
+            <Drawer>
+              <Stack.Navigator>
+                <Stack.Screen
+                  name="TabScreen"
+                  component={BottomTab}
+                  options={({ route }) => ({
+                    headerTitle: getHeaderTitle(route),
+                  })}
+                />
+                <Stack.Screen
+                  name='ProfileScreen'
+                  component={ProfileScreen}
+                  options={({ route }) => ({
+                    headerTitle: getHeaderTitle(route),
+                    gestureDirection: 'horizontal', // 手势的方向
+                    gestureEnabled: true, // 启用安卓的手势返回
+                    cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS // 将ios翻页动画应用到安卓上
+                  })}
+                />
+              </Stack.Navigator>
+            </Drawer>
+          </Suspense>
+        ) : (<Suspense fallback={FullPageLoading}>
+          <Stack.Navigator mode={'modal'}>
             <Stack.Screen
-              name="Tab"
-              component={BottomTab}
-              options={({ route }) => ({
-                headerTitle: getHeaderTitle(route),
-              })}
+              name="LoginScreen"
+              component={LoginScreen}
+              options={{
+                headerShown: false,
+              }}
             />
             <Stack.Screen
-              name='Detail'
-              component={Detail}
+              name="RegisterScreen"
+              component={RegisterScreen}
               options={{
+                headerTitle: props => (<></>),
                 gestureDirection: 'horizontal', // 手势的方向
                 gestureEnabled: true, // 启用安卓的手势返回
                 cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS // 将ios翻页动画应用到安卓上
               }}
             />
           </Stack.Navigator>
-        </Drawer>
-        ) : (<Stack.Navigator mode={'modal'}>
-          <Stack.Screen
-            name="Login"
-            component={LoginScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="Register"
-            component={RegisterScreen}
-            options={{
-              headerTitle: props => (<></>),
-              gestureDirection: 'horizontal', // 手势的方向
-              gestureEnabled: true, // 启用安卓的手势返回
-              cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS // 将ios翻页动画应用到安卓上
-            }}
-          />
-        </Stack.Navigator>
+        </Suspense>
         )
       }
     </>

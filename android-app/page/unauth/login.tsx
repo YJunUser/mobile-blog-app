@@ -9,7 +9,7 @@ import { useAuth } from "../../context/auth-context";
 import { checkEmail } from "../../utils";
 import { styles } from "./styles";
 
-export const LoginScreen = () => {
+const LoginScreen = () => {
   const [username, onChangeUsername] = useState<string>('')
   const [password, onChangePassword] = useState<string>('')
   const [isValid, setValid] = useState<boolean>(false)
@@ -24,6 +24,9 @@ export const LoginScreen = () => {
     } else {
       setValid(false)
     }
+    return () => {
+      setLoading(false)
+    }
   }, [username, password])
 
   const handleSubmit = async (values: {
@@ -33,7 +36,6 @@ export const LoginScreen = () => {
     // do login here
     setLoading(true)
     await login(values);
-    setLoading(false)
   }
 
   return <View style={styles.container}>
@@ -57,10 +59,10 @@ export const LoginScreen = () => {
       value={password}
     />
     <View style={styles.buttonGroup}>
-      <Pressable onPress={() => { navigation.navigate('Register') }}>
+      <Pressable onPress={() => { navigation.navigate('RegisterScreen') }}>
         <Text>忘记密码</Text>
       </Pressable>
-      <Pressable onPress={() => { navigation.navigate('Register') }}>
+      <Pressable onPress={() => { navigation.navigate('RegisterScreen') }}>
         <Text>新用户注册</Text>
       </Pressable>
     </View>
@@ -80,3 +82,5 @@ export const LoginScreen = () => {
   </View >
 }
 
+
+export default LoginScreen

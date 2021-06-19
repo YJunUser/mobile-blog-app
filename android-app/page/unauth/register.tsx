@@ -6,7 +6,7 @@ import { Text, Input, Button } from "react-native-elements"
 import Icon from 'react-native-vector-icons/AntDesign';
 import { checkEmail } from "../../utils";
 
-export const RegisterScreen = () => {
+const RegisterScreen = () => {
   const [username, onChangeUsername] = useState<string>('')
   const [password, onChangePassword] = useState<string>('')
   const [confirmPassword, onChangeConfirm] = useState<string>('')
@@ -81,3 +81,5 @@ const styles = StyleSheet.create({
   }
 }
 )
+
+export default RegisterScreen

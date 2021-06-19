@@ -5,7 +5,7 @@ import { useAuth } from "../../context/auth-context";
 
 
 
-export const Header = () => {
+export const TabHeader = () => {
 
   const { setOpen } = useAuth()
 

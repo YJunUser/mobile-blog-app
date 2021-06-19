@@ -8,5 +8,6 @@ export const baseStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     flexWrap: 'nowrap'
-  }
+  },
+
 })

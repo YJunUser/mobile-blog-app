@@ -14,6 +14,7 @@ import React from 'react';
 import 'react-native-gesture-handler';
 // navigation
 import { NavigationContainer } from '@react-navigation/native';
+import { navigationRef } from './android-app/RootNavigation'
 import { AndroidApp } from './android-app/andriod';
 // context
 import { AppProvider } from './android-app/context';
@@ -28,7 +29,7 @@ const App = () => {
     <SafeAreaProvider>
       <ThemeProvider>
         <AppProvider>
-          <NavigationContainer>
+          <NavigationContainer ref={navigationRef}>
             <AndroidApp />
           </NavigationContainer>
         </AppProvider>

@@ -1,7 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { Avatar, Icon, ListItem } from 'react-native-elements'
 import { baseStyles } from '../../assets/styles';
+import { useAuth } from '../../context/auth-context';
+
+import * as RootNavigation from '../../RootNavigation'
+import { styles } from './styles';
 
 const list = [{
   title: '收藏夹',
@@ -20,11 +24,18 @@ const list = [{
 
 
 export const Menu = (): JSX.Element => {
+  const { setOpen } = useAuth()
   return (
-    
     <View style={[styles.container, styles.navigationContainer]}>
       <View style={styles.header}>
-        <Avatar rounded icon={{ name: 'user-circle-o', type: 'font-awesome', color: 'white' }} size='large' >
+        <Avatar rounded icon={{ name: 'user-circle-o', type: 'font-awesome', color: 'white' }} size='large' onPress={() => {
+          // close drawer first
+          setOpen({ open: false })
+          // delay time and user can see it
+          setTimeout(() => {
+            RootNavigation.navigate('ProfileScreen')
+          }, 200);
+        }}>
         </Avatar>
         <TouchableOpacity style={styles.button}>
           <View style={[baseStyles.row]}>
@@ -51,38 +62,4 @@ export const Menu = (): JSX.Element => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    color: '#ffffff'
-  },
-  navigationContainer: {
-    backgroundColor: '#000000',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    height: 70
-  },
-  scan: { color: 'white', fontSize: 12, marginRight: 8 },
-  button: {
-    alignItems: "center",
-    justifyContent: 'center',
-    backgroundColor: "#a9a9a9",
-    height: 30,
-    paddingLeft: 8,
-    paddingRight: 8,
-    borderRadius: 6
-  },
-  main: {
-    marginLeft: 15
-  },
-  paragraph: {
-    fontSize: 18,
-    color: '#ffffff',
-    fontWeight: 'bold',
-    marginBottom: 30
-  },
-});
+
