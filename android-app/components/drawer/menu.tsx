@@ -34,7 +34,7 @@ export const Menu = (): JSX.Element => {
           // delay time and user can see it
           setTimeout(() => {
             RootNavigation.navigate('ProfileScreen')
-          }, 200);
+          }, 500);
         }}>
         </Avatar>
         <TouchableOpacity style={styles.button}>

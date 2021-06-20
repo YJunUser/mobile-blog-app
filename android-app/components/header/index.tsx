@@ -11,11 +11,7 @@ export const TabHeader = () => {
 
   return (
     <View style={{}}>
-      <TouchableNativeFeedback onPress={() => setOpen({ open: true })}>
-        <Text>
-          <Icon name={'user-circle-o'} size={30} color={'gray'} />
-        </Text>
-      </TouchableNativeFeedback>
+      <Icon name={'user-circle-o'} size={30} color={'gray'} onPress={() => setOpen({ open: true })} />
     </View>
   );
 };

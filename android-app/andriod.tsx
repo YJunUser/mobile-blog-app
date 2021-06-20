@@ -52,7 +52,11 @@ const Stack = createStackNavigator(
 );
 
 export const AndroidApp = () => {
-  const { user } = useAuth()
+  const user = {
+    username: 'adad',
+    password: '123456'
+  }
+  
   return (
     <>
       {
@@ -80,7 +84,7 @@ export const AndroidApp = () => {
               </Stack.Navigator>
             </Drawer>
           </Suspense>
-        ) : (<Suspense fallback={FullPageLoading}>
+        ) : (<Suspense fallback={<FullPageLoading></FullPageLoading>}>
           <Stack.Navigator mode={'modal'}>
             <Stack.Screen
               name="LoginScreen"
