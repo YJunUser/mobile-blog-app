@@ -8,13 +8,14 @@ import { getHeaderTitle } from './utils/header';
 import { useAuth } from './context/auth-context';
 import { Suspense } from 'react';
 
+import ProfileScreen from './page/profile/index';
 import FullPageLoading from './components/FullPageLoading';
 
 // lazy components
 const HomeScreen = React.lazy(() => import('./page/home/index'))
 const LoginScreen = React.lazy(() => import('./page/unauth/login'))
 const RegisterScreen = React.lazy(() => import('./page/unauth/register'))
-const ProfileScreen = React.lazy(() => import('./page/profile/index'))
+
 
 // Tab-bar Screen
 const BottomTab = () => {
@@ -35,7 +36,7 @@ const BottomTab = () => {
         },
       })}
       tabBarOptions={{
-        activeTintColor: 'tomato',
+        activeTintColor: '#6495ed',
         inactiveTintColor: 'gray',
       }}>
       <Tab.Screen name="HomeScreen" component={HomeScreen} />
@@ -56,7 +57,7 @@ export const AndroidApp = () => {
     username: 'adad',
     password: '123456'
   }
-  
+
   return (
     <>
       {

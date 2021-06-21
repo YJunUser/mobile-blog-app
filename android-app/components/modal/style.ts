@@ -24,5 +24,6 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     alignContent: 'center'
   },
-  modalItem: { justifyContent: 'center', alignItems: 'center', width: '33%', marginTop: 30 }
+  modalItem: { justifyContent: 'center', alignItems: 'center', width: '33%', marginTop: 30 },
+  modalItemTitle: { marginTop: 10, fontSize: 12 }
 })
