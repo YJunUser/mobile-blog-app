@@ -8,10 +8,15 @@ export const styles = StyleSheet.create({
     padding: 20,
     width: '100%'
   },
-  closeBtn: {
+  rightCom: {
     position: 'absolute',
     right: 10,
-    top: 10
+    top: 18
+  },
+  leftCom: {
+    position: 'absolute',
+    left: 10,
+    top: 18
   },
   title: {
     textAlign: 'center',
