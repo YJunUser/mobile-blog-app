@@ -5569,6 +5569,11 @@ react-native-elements@^3.4.2:
     react-native-ratings "8.0.4"
     react-native-size-matters "^0.3.1"
 
+react-native-file-selector@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.nlark.com/react-native-file-selector/download/react-native-file-selector-1.0.1.tgz#56d31f48b98d55d6f65e6b6d59736c46db7dc2d3"
+  integrity sha1-VtMfSLmNVdb2XmttWXNsRtt9wtM=
+
 react-native-gesture-handler@^1.10.3:
   version "1.10.3"
   resolved "https://registry.npm.taobao.org/react-native-gesture-handler/download/react-native-gesture-handler-1.10.3.tgz#942bbf2963bbf49fa79593600ee9d7b5dab3cfc0"
