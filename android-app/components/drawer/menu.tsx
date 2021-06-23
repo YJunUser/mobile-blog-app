@@ -3,28 +3,33 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { Avatar, Icon, ListItem } from 'react-native-elements'
 import { baseStyles } from '../../assets/styles';
 import { useAuth } from '../../context/auth-context';
-
 import * as RootNavigation from '../../RootNavigation'
+import { MenuProps } from '../../types/menu';
 import { styles } from './styles';
 
-const list = [{
-  title: '收藏夹',
-  icon: 'staro',
-  iconType: 'ant-design',
-  iconColor: 'yellow',
-  size: 20
-},
-{
-  title: '设置',
-  icon: 'setting',
-  iconType: 'ant-design',
-  iconColor: 'gray',
-  size: 20
-}]
-
-
 export const Menu = (): JSX.Element => {
-  const { setOpen } = useAuth()
+  const { setOpen, logout } = useAuth()
+  const list: MenuProps[] = [{
+    title: '回收站',
+    icon: 'delete',
+    iconType: 'ant-design',
+    iconColor: 'yellow',
+    size: 20
+  },
+  {
+    title: '设置',
+    icon: 'setting',
+    iconType: 'ant-design',
+    iconColor: 'gray',
+    size: 20
+  }, {
+    title: '退出',
+    icon: 'logout',
+    iconType: 'ant-design',
+    iconColor: 'blue',
+    size: 20,
+    handler: logout
+  }]
   return (
     <View style={[styles.container, styles.navigationContainer]}>
       <View style={styles.header}>
@@ -50,7 +55,7 @@ export const Menu = (): JSX.Element => {
         {
           list.map((item, index) => (
             <ListItem key={index} containerStyle={{ backgroundColor: '#000000', margin: 10, padding: 0, marginLeft: 0, }}>
-              <Icon name={item.icon} type={item.iconType} color={item.iconColor} size={item.size}></Icon>
+              <Icon name={item.icon} type={item.iconType} color={item.iconColor} size={item.size} onPress={item.handler}></Icon>
               <ListItem.Content>
                 <ListItem.Title style={{ color: '#ffffff', fontSize: 15 }}>{item.title}</ListItem.Title>
               </ListItem.Content>

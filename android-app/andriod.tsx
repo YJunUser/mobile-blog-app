@@ -24,7 +24,7 @@ const BottomTab = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
+        tabBarIcon: ({ focused, color, size }: {focused: boolean, color: string, size: number}) => {
           let iconName: string;
           if (route.name === 'HomeScreen') {
             iconName = focused ? 'file-text' : 'file-text';
@@ -53,15 +53,12 @@ const Stack = createStackNavigator(
 );
 
 export const AndroidApp = () => {
-  const user = {
-    username: 'adad',
-    password: '123456'
-  }
+  const { token } = useAuth()
 
   return (
     <>
       {
-        user ? (
+        token ? (
           <Suspense fallback={<FullPageLoading></FullPageLoading>}>
             <Drawer>
               <Stack.Navigator>
