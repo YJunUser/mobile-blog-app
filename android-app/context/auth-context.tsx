@@ -83,6 +83,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       try {
         const storageToken = await auth.getToken()
         setToken(storageToken)
+        console.log(storageToken)
         setTimeout(() => {
           setLoading(false)
         }, 1000);

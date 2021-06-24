@@ -22,18 +22,27 @@ import { AppProvider } from './android-app/context';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 // UI styles
 import { ThemeProvider } from 'react-native-elements';
+// react-query
+import { QueryClient, QueryClientProvider } from 'react-query'
+
+// ignore the warning setting Setting a timer for a long period of time, i.e. multiple minutes
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs(['Setting a timer']);
 
 
 const App = () => {
   return (
     <SafeAreaProvider>
-      <ThemeProvider>
-        <AppProvider>
-          <NavigationContainer ref={navigationRef}>
-            <AndroidApp />
-          </NavigationContainer>
-        </AppProvider>
-      </ThemeProvider>
+      <QueryClientProvider client={new QueryClient()}>
+        <ThemeProvider>
+          <AppProvider>
+            <NavigationContainer ref={navigationRef}>
+              <AndroidApp />
+            </NavigationContainer>
+          </AppProvider>
+        </ThemeProvider>
+      </QueryClientProvider>
     </SafeAreaProvider>
   );
 };
