@@ -1,6 +1,8 @@
 import React, { ReactNode, useState } from 'react'
 import { userLogin, userLogout, userRegister } from '../api/auth';
-import { tokenResponse, UserLogin, UserRegister } from '../types/auth';
+import FullPageError from '../components/FullPageActive/FullpageError';
+import FullPageLoading from '../components/FullPageActive/FullPageLoading';
+import { UserLogin, UserRegister } from '../types/auth';
 import { useMount } from '../utils';
 import * as auth from '../utils/auth-control'
 
@@ -26,6 +28,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const [user, setUser] = useState<{ username: string, password: string } | null>(null)
   const [token, setToken] = useState<string>(null)
+  const [fullLoading, setLoading] = useState<boolean>(false)
+  const [isError, setError] = useState<boolean>(false)
 
   // drawer open
   const [isOpen, setOpen] = useState({ open: false })
@@ -53,9 +57,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         // 登出失败
       }
     }).catch(error => {
-      // 情趣失败
+      // 请求失败
       console.log(error)
-      return error
+      return Promise.reject(error)
     })
   }
 
@@ -75,23 +79,32 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useMount(() => {
     //// Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = async () => {
+      setLoading(true)
+      try {
         const storageToken = await auth.getToken()
         setToken(storageToken)
+        setTimeout(() => {
+          setLoading(false)
+        }, 1000);
+      } catch (error) {
+        setLoading(false)
+        setError(true)
+      }
     }
-
+    
     bootstrapAsync()
   })
 
-  // if (isError) {
+  if (isError) {
+    return <FullPageError></FullPageError>
+  }
 
-  // }
-
-  // if (isLoading) {
-
-  // }
+  if (fullLoading) {
+    return <FullPageLoading></FullPageLoading>
+  }
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, isOpen, setOpen, token }} children={children}></AuthContext.Provider>
+    <AuthContext.Provider value={{ user, login, register, logout, isOpen, setOpen, token }}>{children}</AuthContext.Provider>
   )
 }
 

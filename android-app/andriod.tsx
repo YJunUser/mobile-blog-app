@@ -9,7 +9,7 @@ import { useAuth } from './context/auth-context';
 import { Suspense } from 'react';
 
 import ProfileScreen from './page/profile/index';
-import FullPageLoading from './components/FullPageLoading';
+import FullPageLoading from './components/FullPageActive/FullPageLoading';
 
 // lazy components
 const HomeScreen = React.lazy(() => import('./page/home/index'))

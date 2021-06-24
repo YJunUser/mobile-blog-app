@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, ActivityIndicator, Text } from 'react-native'
+import { View, StyleSheet, ActivityIndicator } from 'react-native'
 
 
 const FullPageLoading = () => {
