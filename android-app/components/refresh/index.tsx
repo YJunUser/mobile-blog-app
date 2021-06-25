@@ -4,24 +4,23 @@ import { RefreshControl } from 'react-native';
 type RefreshControlProps = React.ComponentProps<typeof RefreshControl>
 
 interface RefreshProps extends Omit<RefreshControlProps, 'loadData' | 'refreshing' | 'color'> {
-  loadData?: () => Promise<any>,
+  loadData?: () => Promise<void>,
   color?: string
 }
 
 
 export const useRefresh = (props?: RefreshProps) => {
   const [isRefresh, setRefresh] = useState<boolean>(false)
+  const { loadData, color = '#666' } = props
 
-  const color = props?.color || '#666'
-
-  const onPageRefresh = () => {
+  const onPageRefresh = async () => {
     if (isRefresh) return
     setRefresh(true)
 
-    // loadData here
-    setTimeout(() => {
-      setRefresh(false)
-    }, 1000);
+    await loadData()
+      setTimeout(() => {
+        setRefresh(false)
+      }, 1000);
   }
 
   const renderRefreshControl = () => {

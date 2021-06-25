@@ -2,34 +2,14 @@ import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Avatar, Icon, ListItem } from 'react-native-elements'
 import { baseStyles } from '../../assets/styles';
-import { useAuth } from '../../context/auth-context';
 import * as RootNavigation from '../../RootNavigation'
-import { MenuProps } from '../../types/menu';
 import { styles } from './styles';
+import { useMenu } from './utils';
 
 export const Menu = (): JSX.Element => {
-  const { setOpen, logout } = useAuth()
-  const list: MenuProps[] = [{
-    title: '回收站',
-    icon: 'delete',
-    iconType: 'ant-design',
-    iconColor: 'yellow',
-    size: 20
-  },
-  {
-    title: '设置',
-    icon: 'setting',
-    iconType: 'ant-design',
-    iconColor: 'gray',
-    size: 20
-  }, {
-    title: '退出',
-    icon: 'logout',
-    iconType: 'ant-design',
-    iconColor: 'blue',
-    size: 20,
-    handler: logout
-  }]
+
+  const { list, setOpen } = useMenu()
+
   return (
     <View style={[styles.container, styles.navigationContainer]}>
       <View style={styles.header}>

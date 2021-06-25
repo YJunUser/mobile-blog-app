@@ -1,6 +1,6 @@
 import { getFocusedRouteNameFromRoute, Route } from "@react-navigation/native";
 import { TabHeader } from "../components/header";
-import { Text, StyleSheet } from 'react-native'
+import { Text, StyleSheet, View } from 'react-native'
 import React from "react";
 
 // 根据不同的路由导入不同的header
@@ -21,6 +21,18 @@ export function getHeaderTitle(route: Partial<Route<string, object>>): () => JSX
       return () => {
         return (<Text style={styles.headerTitle}>编辑个人资料</Text>)
       }
+  }
+}
+
+export function getEditHeader(setEdit: (isEdit: boolean) => void): () => JSX.Element {
+  return () => {
+    return (
+      <View style={{ flexDirection: 'row', flexWrap: 'nowrap', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Text onPress={() => setEdit(false)}>取消</Text>
+        <Text style={{color: '#000000', fontWeight: 'bold', fontSize: 16}}>编辑文件</Text>
+        <Text style={{ color: '#1e90ff' }} onPress={() => setEdit(false)}>完成</Text>
+      </View>
+    )
   }
 }
 

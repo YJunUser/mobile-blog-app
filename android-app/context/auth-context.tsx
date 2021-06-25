@@ -17,6 +17,8 @@ interface ContextStore {
   isOpen: { open: boolean };
   setOpen: (isOpen: { open: boolean }) => void,
   token: string | null;
+  isEdit: boolean,
+  setEdit: (isEdit: boolean) => void
 }
 
 // create a store 
@@ -30,6 +32,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string>(null)
   const [fullLoading, setLoading] = useState<boolean>(false)
   const [isError, setError] = useState<boolean>(false)
+  const [isEdit, setEdit] = useState<boolean>(false)
 
   // drawer open
   const [isOpen, setOpen] = useState({ open: false })
@@ -105,7 +108,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, isOpen, setOpen, token }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user, login, register, logout, isOpen, setOpen, token, isEdit, setEdit }}>{children}</AuthContext.Provider>
   )
 }
 

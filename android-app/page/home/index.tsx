@@ -1,21 +1,42 @@
 import React, { useState } from 'react';
-import { ScrollView, View, Text, TouchableNativeFeedback, TextInput, StyleSheet } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { useRefresh } from '../../components/refresh';
 import { styles } from './style';
 import { UsingModal } from '../../components/modal/usingModal';
 import { useFileItem } from '../../utils/file-item';
 import { fileParams } from '../../types/file';
-import { useEffect } from 'react';
 import { FileItem } from '../../components/FileItem';
-import LinearGradient from 'react-native-linear-gradient';
+import { EditModal } from '../../components/modal/editModal';
+import { useQueryClient } from 'react-query';
+import { useFocusEffect } from '@react-navigation/native';
+
+
+
+
 
 const HomeScreen = () => {
-  const { renderRefreshControl } = useRefresh()
+
+  const queryClient = useQueryClient()
+  const reloadData = () => {
+    return queryClient.invalidateQueries('fileData')
+  }
+
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log('i am focused')
+      return () => console.log('ddd')
+    }, [])
+  )
+  const { renderRefreshControl } = useRefresh({ loadData: reloadData })
+
   const fileParams: fileParams = {
     fileStatus: 'unRecycled',
   }
+
   const { data: fileData, isError, isLoading, error } = useFileItem(fileParams)
-  console.log(fileData)
+
+  const [select, setSelect] = useState<number[]>([])
+
 
   return (
     // <View style={{ height: '100%' }}>
@@ -27,10 +48,11 @@ const HomeScreen = () => {
 
       <View style={styles.fileContainer}>
         {
-          fileData?.map((item) => <FileItem file={item} key={item.name}></FileItem>)
+          fileData?.map((item) => <FileItem file={item} key={item.name} setSelect={setSelect} select={select}></FileItem>)
         }
       </View>
       <UsingModal></UsingModal>
+      <EditModal></EditModal>
     </ScrollView >
     // </View>
   );

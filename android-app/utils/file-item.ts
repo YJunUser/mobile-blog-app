@@ -4,7 +4,7 @@ import { fileParams } from "../types/file"
 
 
 export const useFileItem = (params: fileParams) => {
-    return useQuery(["fileData", params], async () => {
+    return useQuery("fileData", async () => {
         const res = await getFile(params)
         return res.data.data
     })

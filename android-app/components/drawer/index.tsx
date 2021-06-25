@@ -15,9 +15,10 @@ export const Drawer = ({
   useMount(() => {
     setOpen({ open: false })
   })
+  console.log(isOpen.open)
 
   return (
-    <SideMenu disableGestures={false} menu={<Menu />} isOpen={isOpen.open}>
+    <SideMenu disableGestures={false} menu={<Menu />} isOpen={isOpen.open} autoClosing={true} onChange={() => console.log('hhh')}>
       {children}
     </SideMenu>
   );

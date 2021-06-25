@@ -4,7 +4,7 @@ import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Drawer } from './components/drawer';
 import { ListScreen } from './page/list';
-import { getHeaderTitle } from './utils/header';
+import { getEditHeader, getHeaderTitle } from './utils/header';
 import { useAuth } from './context/auth-context';
 import { Suspense } from 'react';
 
@@ -20,11 +20,13 @@ const RegisterScreen = React.lazy(() => import('./page/unauth/register'))
 // Tab-bar Screen
 const BottomTab = () => {
   const Tab = createBottomTabNavigator();
+  const { isEdit } = useAuth()
+
 
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }: {focused: boolean, color: string, size: number}) => {
+        tabBarIcon: ({ focused, color, size }: { focused: boolean, color: string, size: number }) => {
           let iconName: string;
           if (route.name === 'HomeScreen') {
             iconName = focused ? 'file-text' : 'file-text';
@@ -39,7 +41,7 @@ const BottomTab = () => {
         activeTintColor: '#6495ed',
         inactiveTintColor: 'gray',
       }}>
-      <Tab.Screen name="HomeScreen" component={HomeScreen} />
+      <Tab.Screen name="HomeScreen" component={HomeScreen} options={{ tabBarVisible: !isEdit }} />
       <Tab.Screen name="ListScreen" component={ListScreen} />
     </Tab.Navigator>
   );
@@ -53,7 +55,7 @@ const Stack = createStackNavigator(
 );
 
 export const AndroidApp = () => {
-  const { token } = useAuth()
+  const { token, isEdit, setEdit } = useAuth()
 
   return (
     <>
@@ -66,7 +68,8 @@ export const AndroidApp = () => {
                   name="TabScreen"
                   component={BottomTab}
                   options={({ route }) => ({
-                    headerTitle: getHeaderTitle(route),
+                    // headerTitle: getHeaderTitle(route),
+                    headerTitle: isEdit ? getEditHeader(setEdit) : getHeaderTitle(route),
                   })}
                 />
                 <Stack.Screen

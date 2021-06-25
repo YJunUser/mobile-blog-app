@@ -59,7 +59,6 @@ class HttpRequest {
           // Unauthorized
           if (error.response.status === 401) {
             await auth.removeToken()
-            window.location.reload()
           }
           return Promise.reject(error.response.data.errorMessage.userPromptMsg)
         } else {

@@ -16,7 +16,7 @@ type dataItem = {
 }
 
 interface ModalComponentProps extends Omit<ModalProps, 'list' | 'ref' | 'title'> {
-  title: string;
+  title?: string;
   list?: dataItem[]; // 传过来的数据
   toggleModal?: () => void; // 改变是否可见的函数
   ModalStyle?: StyleProp<ViewStyle>, // modal的样式
@@ -24,10 +24,12 @@ interface ModalComponentProps extends Omit<ModalProps, 'list' | 'ref' | 'title'>
   leftTopChildren?: React.ReactNode, // 左上角子组件
   rightTopChildren?: React.ReactNode, // 右上角子组件
   contentChildren?: React.ReactNode // 内容组件
+  showClose?: boolean,
+  showTitle?: boolean
 }
 
 export const ModalComponent = (props: ModalComponentProps) => {
-  const { list, toggleModal, title, ModalStyle, ModalContentStyle, rightTopChildren, leftTopChildren, contentChildren, ...rest } = props
+  const { list, toggleModal, title, ModalStyle, ModalContentStyle, rightTopChildren, leftTopChildren, contentChildren, showClose = true, showTitle = true, ...rest } = props
 
 
   return (
@@ -40,11 +42,13 @@ export const ModalComponent = (props: ModalComponentProps) => {
         </View>
         <View style={styles.rightCom}>
           {
-            rightTopChildren ? rightTopChildren : <Icon name='closecircle' color="#dcdcdc" size={16} onPress={toggleModal}></Icon>
+            rightTopChildren ? rightTopChildren : showClose ? <Icon name='closecircle' color="#dcdcdc" size={16} onPress={toggleModal}></Icon> : null
           }
         </View>
 
-        <Text style={styles.title}>{title}</Text>
+        {
+          showTitle? <Text style={styles.title}>{title}</Text> : null
+        }
 
         <View style={ModalContentStyle ? ModalContentStyle : styles.modalContent}>
           {
