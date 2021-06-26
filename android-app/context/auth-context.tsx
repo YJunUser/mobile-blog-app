@@ -1,24 +1,23 @@
 import React, { ReactNode, useState } from 'react'
+import { useEffect } from 'react';
 import { userLogin, userLogout, userRegister } from '../api/auth';
+import { getUserInfo } from '../api/user';
 import FullPageError from '../components/FullPageActive/FullpageError';
 import FullPageLoading from '../components/FullPageActive/FullPageLoading';
 import { UserLogin, UserRegister } from '../types/auth';
+import { UserInfo } from '../types/user';
 import { useMount } from '../utils';
 import * as auth from '../utils/auth-control'
 
 interface ContextStore {
-  user: {
-    username: string;
-    password: string;
-  } | null; // null代表还没登陆
+  user: UserInfo | null; // null代表还没登陆
+  setUser: (user: UserInfo) => void;
   login: (params: UserLogin) => Promise<unknown>;
   logout: () => Promise<unknown>;
   register: (params: UserRegister) => Promise<unknown>;
   isOpen: boolean;
   setOpen: (isOpen: boolean) => void;
-  // isOpen: { open: boolean };
-  // setOpen: (isOpen: { open: boolean }) => void,
-  token: string | null;
+  token: string | null; // null代表还没登陆
   isEdit: boolean,
   setEdit: (isEdit: boolean) => void
 }
@@ -30,7 +29,7 @@ AuthContext.displayName = 'AuthContext'
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
-  const [user, setUser] = useState<{ username: string, password: string } | null>(null)
+  const [user, setUser] = useState<UserInfo| null>(null)
   const [token, setToken] = useState<string>(null)
   const [fullLoading, setLoading] = useState<boolean>(false)
   const [isError, setError] = useState<boolean>(false)
@@ -83,10 +82,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   useMount(() => {
-    //// Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = async () => {
       setLoading(true)
       try {
+        //// Fetch the token from storage then navigate to our appropriate place
         const storageToken = await auth.getToken()
         setToken(storageToken)
         console.log(storageToken)
@@ -98,9 +97,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setError(true)
       }
     }
-    
     bootstrapAsync()
   })
+
+  // token变化后去拉取用户信息
+  useEffect(() => {
+    const bootstrapUser = async () => {
+      const response = await getUserInfo()
+      const UserInfo = response.data.data
+      setUser(UserInfo)
+    }
+    bootstrapUser()
+    
+  },[token])
 
   if (isError) {
     return <FullPageError></FullPageError>
@@ -111,7 +120,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, isOpen, setOpen, token, isEdit, setEdit }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user, login, register, logout, isOpen, setOpen, token, isEdit, setEdit, setUser }}>{children}</AuthContext.Provider>
   )
 }
 

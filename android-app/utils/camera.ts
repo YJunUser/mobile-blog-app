@@ -16,7 +16,7 @@ export const useCamera = () => {
 
 export const useImagePicker = () => {
   const openImagePicker = async () => {
-    const uploadresult = await ImagePicker.openPicker({
+    const uploadResult = await ImagePicker.openPicker({
       width: 300, //设定上传图片的宽度
       height: 400, //设定上传图片的高度
       cropperChooseText: '确定',
@@ -26,9 +26,8 @@ export const useImagePicker = () => {
       //  includeBase64: true,
       compressImageQuality: 0.2,   //照片压缩比例：0.2
     });
-    console.log('hhh')
-    console.log(uploadresult)
-    return uploadresult
+    console.log(uploadResult)
+    return uploadResult
   }
   return openImagePicker
 }

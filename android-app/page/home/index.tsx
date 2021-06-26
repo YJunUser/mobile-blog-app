@@ -21,12 +21,6 @@ const HomeScreen = () => {
     return queryClient.invalidateQueries('fileData')
   }
 
-  useFocusEffect(
-    React.useCallback(() => {
-      console.log('i am focused')
-      return () => console.log('ddd')
-    }, [])
-  )
   const { renderRefreshControl } = useRefresh({ loadData: reloadData })
 
   const fileParams: fileParams = {
@@ -36,6 +30,7 @@ const HomeScreen = () => {
   const { data: fileData, isError, isLoading, error } = useFileItem(fileParams)
 
   const [select, setSelect] = useState<number[]>([])
+
 
 
   return (
@@ -48,7 +43,7 @@ const HomeScreen = () => {
 
       <View style={styles.fileContainer}>
         {
-          fileData?.map((item) => <FileItem file={item} key={item.name} setSelect={setSelect} select={select}></FileItem>)
+          fileData?.map((item) => <FileItem file={item} key={item.size} setSelect={setSelect} select={select}></FileItem>)
         }
       </View>
       <UsingModal></UsingModal>

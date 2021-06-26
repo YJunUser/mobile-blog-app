@@ -11,12 +11,6 @@ export const Drawer = ({
 }) => {
   const { isOpen, setOpen } = useAuth()
 
-  // 开始时总是把抽屉关上
-  useMount(() => {
-    setOpen(false)
-  })
-  console.log(isOpen)
-
   return (
     <SideMenu disableGestures={false} menu={<Menu />} isOpen={isOpen} autoClosing={true} onChange={() => setOpen(!isOpen)}>
       {children}

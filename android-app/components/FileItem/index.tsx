@@ -48,7 +48,7 @@ export const FileItem = (props: FileItemProps) => {
                     name={isCheck ? 'check-circle' : 'circle-thin'}
                     color={isCheck ? '#00bfff' : 'gray'}
                     size={16}
-                    onPress={() => { switchCheck(file.size) }}>
+                    onPress={() => { switchCheck(file.id) }}>
                 </Icon> : null
             }
         </View >
