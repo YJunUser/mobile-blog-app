@@ -8,14 +8,14 @@ import { useMenu } from './utils';
 
 export const Menu = (): JSX.Element => {
 
-  const { list, setOpen } = useMenu()
+  const { list, setOpen, isOpen } = useMenu()
 
   return (
     <View style={[styles.container, styles.navigationContainer]}>
       <View style={styles.header}>
         <Avatar rounded icon={{ name: 'user-circle-o', type: 'font-awesome', color: 'white' }} size='large' onPress={() => {
           // close drawer first
-          setOpen({ open: false })
+          setOpen(!isOpen)
           // delay time and user can see it
           setTimeout(() => {
             RootNavigation.navigate('ProfileScreen')

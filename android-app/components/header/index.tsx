@@ -7,11 +7,11 @@ import { useAuth } from "../../context/auth-context";
 
 export const TabHeader = () => {
 
-  const { setOpen } = useAuth()
+  const { setOpen, isOpen } = useAuth()
 
   return (
     <View style={{}}>
-      <Icon name={'user-circle-o'} size={30} color={'gray'} onPress={() => setOpen({ open: true })} />
+      <Icon name={'user-circle-o'} size={30} color={'gray'} onPress={() => setOpen(!isOpen)} />
     </View>
   );
 };

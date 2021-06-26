@@ -12,7 +12,7 @@ export interface ResponseData<T = unknown> {
   errorMessage: string;
 }
 
-const apiBaseUrl = 'http://192.168.2.105:2048'
+const apiBaseUrl = 'http://sharer.violetfreesia.com:666'
 
 class HttpRequest {
   constructor(
@@ -63,7 +63,7 @@ class HttpRequest {
           return Promise.reject(error.response.data.errorMessage.userPromptMsg)
         } else {
           // 服务器繁忙
-          return Promise.reject(error.response.data.errorMessage.userPromptMsg)
+          return Promise.reject('超时')
         }
       }
     )

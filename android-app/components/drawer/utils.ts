@@ -4,7 +4,7 @@ import { MenuProps } from "../../types/menu"
 
 
 export const useMenu = () => {
-    const { setOpen, logout } = useAuth()
+    const { setOpen, logout, isOpen } = useAuth()
     const list: MenuProps[] = [{
         title: '回收站',
         icon: 'delete',
@@ -26,8 +26,8 @@ export const useMenu = () => {
         size: 20,
         handler: logout
     }]
-    useEffect(() => {
-        setOpen({ open: false })
-    }, [])
-    return { list, setOpen }
+    // useEffect(() => {
+    //     setOpen(false)
+    // }, [])
+    return { list, setOpen, isOpen }
 }

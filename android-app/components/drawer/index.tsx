@@ -13,12 +13,12 @@ export const Drawer = ({
 
   // 开始时总是把抽屉关上
   useMount(() => {
-    setOpen({ open: false })
+    setOpen(false)
   })
-  console.log(isOpen.open)
+  console.log(isOpen)
 
   return (
-    <SideMenu disableGestures={false} menu={<Menu />} isOpen={isOpen.open} autoClosing={true} onChange={() => console.log('hhh')}>
+    <SideMenu disableGestures={false} menu={<Menu />} isOpen={isOpen} autoClosing={true} onChange={() => setOpen(!isOpen)}>
       {children}
     </SideMenu>
   );

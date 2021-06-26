@@ -14,8 +14,10 @@ interface ContextStore {
   login: (params: UserLogin) => Promise<unknown>;
   logout: () => Promise<unknown>;
   register: (params: UserRegister) => Promise<unknown>;
-  isOpen: { open: boolean };
-  setOpen: (isOpen: { open: boolean }) => void,
+  isOpen: boolean;
+  setOpen: (isOpen: boolean) => void;
+  // isOpen: { open: boolean };
+  // setOpen: (isOpen: { open: boolean }) => void,
   token: string | null;
   isEdit: boolean,
   setEdit: (isEdit: boolean) => void
@@ -35,7 +37,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isEdit, setEdit] = useState<boolean>(false)
 
   // drawer open
-  const [isOpen, setOpen] = useState({ open: false })
+  // const [isOpen, setOpen] = useState({ open: false })
+  const [isOpen, setOpen] = useState<boolean>(false)
 
   const login = (params: UserLogin) => {
     return userLogin(params).then(res => {
