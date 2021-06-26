@@ -12,7 +12,7 @@ export interface ResponseData<T = unknown> {
   errorMessage: string;
 }
 
-const apiBaseUrl = 'http://sharer.violetfreesia.com:666'
+export const apiBaseUrl = 'http://sharer.violetfreesia.com:666'
 
 class HttpRequest {
   constructor(

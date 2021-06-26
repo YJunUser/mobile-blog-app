@@ -29,14 +29,11 @@ AuthContext.displayName = 'AuthContext'
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
-  const [user, setUser] = useState<UserInfo| null>(null)
+  const [user, setUser] = useState<UserInfo | null>(null)
   const [token, setToken] = useState<string>(null)
   const [fullLoading, setLoading] = useState<boolean>(false)
   const [isError, setError] = useState<boolean>(false)
   const [isEdit, setEdit] = useState<boolean>(false)
-
-  // drawer open
-  // const [isOpen, setOpen] = useState({ open: false })
   const [isOpen, setOpen] = useState<boolean>(false)
 
   const login = (params: UserLogin) => {
@@ -103,13 +100,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // token变化后去拉取用户信息
   useEffect(() => {
     const bootstrapUser = async () => {
-      const response = await getUserInfo()
-      const UserInfo = response.data.data
-      setUser(UserInfo)
+      if (token) {
+        try {
+          const response = await getUserInfo()
+          const UserInfo = response.data.data
+          setUser(UserInfo)
+        } catch (error) {
+          console.log(error)
+        }
+      }
     }
     bootstrapUser()
-    
-  },[token])
+
+  }, [token])
 
   if (isError) {
     return <FullPageError></FullPageError>

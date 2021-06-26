@@ -5,18 +5,27 @@ import { ListItem, Avatar } from 'react-native-elements'
 import { baseStyles } from '../../assets/styles'
 import { useAuth } from '../../context/auth-context'
 import { useImagePicker } from '../../utils/camera'
-
-
+import { uploadFiles } from '../../utils/uploadFiles'
+import { apiBaseUrl } from '../../api'
 
 const ProfileScreen = () => {
-  const { user, setUser } = useAuth()
+  const { user, setUser, token } = useAuth()
 
   const openImagePicker = useImagePicker()
-
+  
   const getPictureByPicker = async () => {
     try {
       const result = await openImagePicker()
-      const formData = new FormData()
+      uploadFiles({
+        filePath: result.path,
+        url: 'http://sharer.violetfreesia.com:666/sharer-api/upload/avatar',
+        token
+      }).then(res => {
+        const avatarUrl = apiBaseUrl + res.data.avatar
+        setUser({ ...user, avatar: avatarUrl })
+      }).catch(err => {
+        console.log(err)
+      })
 
     } catch (error) {
       console.log(error)
@@ -24,6 +33,7 @@ const ProfileScreen = () => {
 
   }
 
+  const isAvatar = user && user.avatar
   return (
     <View style={styles.container}>
       <ListItem containerStyle={styles.avatarListItem}>
@@ -31,10 +41,10 @@ const ProfileScreen = () => {
           <View style={[baseStyles.row, styles.avatarContent]}>
             <Text>个人头像</Text>
             {
-              user.avatar ?
+              !isAvatar ?
                 <Avatar rounded icon={{ name: 'user-circle-o', type: 'font-awesome', color: '#000000' }} size='large' onPress={getPictureByPicker}></Avatar>
                 :
-                <Avatar rounded source={{ uri: user.avatar }} size='large' onPress={getPictureByPicker}></Avatar>
+                <Avatar rounded source={{ uri: apiBaseUrl + user.avatar }} size={50} onPress={getPictureByPicker}></Avatar>
             }
           </View>
         </ListItem.Content>
@@ -73,7 +83,10 @@ const styles = StyleSheet.create({
   },
   avatarContent: {
     justifyContent: 'space-between',
-    width: '110%'
+    width: '110%',
+    paddingTop: 20,
+    paddingBottom: 20,
+    paddingRight: 10
   },
   content: {
     justifyContent: 'space-between',

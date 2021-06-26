@@ -8,11 +8,6 @@ import { fileParams } from '../../types/file';
 import { FileItem } from '../../components/FileItem';
 import { EditModal } from '../../components/modal/editModal';
 import { useQueryClient } from 'react-query';
-import { useFocusEffect } from '@react-navigation/native';
-
-
-
-
 
 const HomeScreen = () => {
 
