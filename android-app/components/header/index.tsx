@@ -11,7 +11,6 @@ export const TabHeader = () => {
 
   const { setOpen, isOpen, user } = useAuth()
 
-  console.log(user)
   const isAvatar = user && user.avatar
   return (
     <View style={{}}>

@@ -12,7 +12,7 @@ const ProfileScreen = () => {
   const { user, setUser, token } = useAuth()
 
   const openImagePicker = useImagePicker()
-  
+
   const getPictureByPicker = async () => {
     try {
       const result = await openImagePicker()
@@ -21,7 +21,7 @@ const ProfileScreen = () => {
         url: 'http://sharer.violetfreesia.com:666/sharer-api/upload/avatar',
         token
       }).then(res => {
-        const avatarUrl = apiBaseUrl + res.data.avatar
+        const avatarUrl = res.data.avatar
         setUser({ ...user, avatar: avatarUrl })
       }).catch(err => {
         console.log(err)

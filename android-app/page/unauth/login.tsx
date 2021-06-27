@@ -6,7 +6,6 @@ import { View, Pressable } from "react-native"
 import { Text, Input, Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { useAuth } from "../../context/auth-context";
-import { checkEmail } from "../../utils";
 import { styles } from "./styles";
 
 const LoginScreen = () => {
