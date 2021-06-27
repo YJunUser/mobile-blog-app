@@ -1,5 +1,5 @@
 import React from 'react'
-import { TextInput, TouchableNativeFeedback, View, Text, StyleSheet } from 'react-native';
+import { TextInput, TouchableNativeFeedback, View, Text, StyleSheet, Alert } from 'react-native';
 import { ModalComponent } from '.';
 import Icon from 'react-native-vector-icons/AntDesign';
 import EntypoIcon from 'react-native-vector-icons/Entypo';

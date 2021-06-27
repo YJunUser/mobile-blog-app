@@ -9,8 +9,8 @@ import { useAuth } from '../../context/auth-context';
 
 interface FileItemProps {
     file: fileData,
-    setSelect: (select: number[]) => void,
-    select: number[],
+    setSelect: (select: fileData[]) => void,
+    select: fileData[],
     goFileScreen: (params: fileData) => void
 }
 
@@ -18,27 +18,26 @@ export const FileItem = (props: FileItemProps) => {
     const { file, setSelect, select, goFileScreen } = props
     const [isCheck, setCheck] = useState<boolean>(false)
     const { isEdit, setEdit } = useAuth()
-    console.log(file)
 
-    const switchCheck = (id: number): void => {
-        if (select.includes(id)) {
+
+    const switchCheck = (file: fileData): void => {
+        if (select.includes(file)) {
             const odd = select;
-            odd.splice(odd.indexOf(id), 1);
-            setSelect(odd)
+            odd.splice(odd.indexOf(file), 1);
+            setSelect([...odd])
             setCheck(false)
-            console.log(select)
+
         } else {
-            select.push(id)
-            setSelect(select)
+            select.push(file)
+            setSelect([...select])
             setCheck(true)
-            console.log(select)
         }
     }
 
     return (
         <View style={[styles.container, styles.fileItem]}>
             <TouchableScale
-                onPress={() => { isEdit ? switchCheck(file.id) : goFileScreen(file) }}
+                onPress={() => { isEdit ? switchCheck(file) : goFileScreen(file) }}
                 onLongPress={() => {
                     setEdit(true)
                 }}

@@ -4,11 +4,12 @@ import { ModalComponent } from '.';
 import { useAuth } from '../../context/auth-context';
 import { StyleSheet, View, Text } from 'react-native'
 import { useEdit } from './utils';
+import { fileData } from '../../types/file';
 
 
-export const EditModal = () => {
+export const EditModal = ({ selectedFiles }: { selectedFiles: fileData[] }) => {
     const { isEdit } = useAuth()
-    const { editItemList } = useEdit()
+    const { editItemList } = useEdit(selectedFiles)
     return (
         <ModalComponent
             hasBackdrop={false}
@@ -24,7 +25,7 @@ export const EditModal = () => {
                         editItemList.map((item) => {
                             return (
                                 <View style={styles.editItem} key={item.name}>
-                                    <Icon name={item.icon} color={item.color} size={item.size || 18}></Icon>
+                                    <Icon name={item.icon} color={item.color} size={item.size || 18} onPress={item.handle}></Icon>
                                     <Text style={{ fontSize: 12, marginTop: 5, color: item.color }}>{item.name}</Text>
                                 </View>
                             )

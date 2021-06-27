@@ -30,7 +30,7 @@ const FileScreen = ({ navigation }: { navigation: any }) => {
     const { data: fileData, isError, isLoading, error } = useFileItem(fileParams)
 
 
-    const [select, setSelect] = useState<number[]>([])
+    const [select, setSelect] = useState<fileData[]>([])
 
     const goFileScreen = (params: fileData) => {
         if (params.isDirectory) {
@@ -56,7 +56,7 @@ const FileScreen = ({ navigation }: { navigation: any }) => {
                 }
             </View>
             <UsingModal presentFolderId={file.id}></UsingModal>
-            <EditModal></EditModal>
+            <EditModal selectedFiles={select}></EditModal>
         </ScrollView >
     )
 }

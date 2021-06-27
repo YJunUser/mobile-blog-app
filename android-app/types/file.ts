@@ -11,6 +11,11 @@ export interface NewFolderParams {
   parentFolderId: number;
 }
 
+export interface RecycleFiles {
+  id: number;
+  isDirectory: boolean;
+}
+
 // 响应数据
 type FileType = 'doc' | 'excel' | 'execute' | 'md' | 'pdf' | 'ppt' | 'sound' | 'txt' | 'unknown' | 'zip'
 export interface fileData {

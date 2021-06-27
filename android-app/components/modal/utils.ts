@@ -1,15 +1,40 @@
 import { useState } from 'react';
+import { Alert, ToastAndroid } from 'react-native';
 import { useAuth } from '../../context/auth-context';
+import { fileData } from '../../types/file';
 import { useCamera, useImagePicker } from '../../utils/camera';
-import { useNewFolder } from '../../utils/file-item';
+import { useRecycleFiles } from '../../utils/file-item';
+
 interface EditItem {
     icon: string;
     color: string;
     size?: number;
     name: string;
+    handle?: () => void
 }
-export const useEdit = () => {
-
+export const useEdit = (selectedFiles: fileData[]) => {
+    const { mutateAsync } = useRecycleFiles()
+    const confirmDelete = () => {
+        Alert.alert('确认删除吗', '删除后可以在回收站中找到',
+            [
+                {
+                    text: "取消",
+                },
+                {
+                    text: "确认", onPress: () => {
+                        console.log(selectedFiles)
+                        selectedFiles.forEach(async (item) => {
+                            await mutateAsync({
+                                id: item.id,
+                                isDirectory: item.isDirectory
+                            })
+                        })
+                        ToastAndroid.showWithGravity('删除成功', ToastAndroid.LONG, ToastAndroid.CENTER)
+                    }
+                },
+            ]
+        );
+    }
 
     const editItemList: EditItem[] = [{
         icon: 'share',
@@ -30,7 +55,8 @@ export const useEdit = () => {
     }, {
         icon: 'close',
         color: 'red',
-        name: '删除'
+        name: '删除',
+        handle: confirmDelete
     }]
 
     return { editItemList }
@@ -41,7 +67,7 @@ export const useUsingModal = () => {
     const [isFileSelectorVisible, setFileSelectorVisible] = useState<boolean>(false)
     const [isFolderVisible, setFolderVisible] = useState<boolean>(false)
     const { isEdit } = useAuth()
-  
+
 
 
     const openImagePicker = useImagePicker()

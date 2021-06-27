@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios'
-import { fileData, fileParams, NewFolderParams } from '../types/file'
+import { fileData, fileParams, NewFolderParams, RecycleFiles } from '../types/file'
 import http, { ResponseData } from './index'
 
 export const getFile = (params: fileParams): Promise<AxiosResponse<ResponseData<fileData[]>>> => {
@@ -15,5 +15,15 @@ export const newFolder = (param: NewFolderParams): Promise<AxiosResponse<Respons
         url: '/sharer-api/folders',
         method: 'post',
         data: param
+    })
+}
+
+export const recycleFiles = (params: RecycleFiles) => {
+    return http.request({
+        url: `/sharer-api/recycle/${params.id}`,
+        method: 'put',
+        params: {
+            isDirectory: params.isDirectory
+        }
     })
 }
