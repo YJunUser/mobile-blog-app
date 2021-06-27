@@ -7,28 +7,29 @@ import { useFileItem } from '../../utils/file-item';
 import { fileData, fileParams } from '../../types/file';
 import { FileItem } from '../../components/FileItem';
 import { EditModal } from '../../components/modal/editModal';
-import { useQueryClient } from 'react-query';
+import { useReloadFile } from './utils';
 
 
 const HomeScreen = ({ navigation }: { navigation: any }) => {
 
-  const queryClient = useQueryClient()
-  const reloadData = () => {
-    return queryClient.invalidateQueries('fileData')
-  }
+  const reloadData = useReloadFile()
   const { renderRefreshControl } = useRefresh({ loadData: reloadData })
 
   const fileParams: fileParams = {
     fileStatus: 'unRecycled',
   }
-
   const { data: fileData, isError, isLoading, error } = useFileItem(fileParams)
+
   const [select, setSelect] = useState<number[]>([])
 
   const goFileScreen = (params: fileData) => {
-    navigation.push('FileScreen', {
-      file: params
-    })
+    if (params.isDirectory) {
+      navigation.push('FileScreen', {
+        file: params
+      })
+    } else {
+      //...
+    }
   }
 
 
@@ -45,7 +46,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
           fileData ? fileData?.map((item) => <FileItem file={item} key={item.name} setSelect={setSelect} select={select} goFileScreen={goFileScreen}></FileItem>) : null
         }
       </View>
-      <UsingModal></UsingModal>
+      <UsingModal presentFolderId={0}></UsingModal>
       <EditModal></EditModal>
     </ScrollView >
     // </View>

@@ -12,7 +12,7 @@ export const getFile = (params: fileParams): Promise<AxiosResponse<ResponseData<
 
 export const newFolder = (param: NewFolderParams): Promise<AxiosResponse<ResponseData<boolean>>> => {
     return http.request({
-        url: '/sharer-api/files/{id}',
+        url: '/sharer-api/folders',
         method: 'post',
         data: param
     })

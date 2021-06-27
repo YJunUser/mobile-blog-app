@@ -38,7 +38,7 @@ export const FileItem = (props: FileItemProps) => {
     return (
         <View style={[styles.container, styles.fileItem]}>
             <TouchableScale
-                onPress={() => goFileScreen(file)}
+                onPress={() => { isEdit ? switchCheck(file.id) : goFileScreen(file) }}
                 onLongPress={() => {
                     setEdit(true)
                 }}
@@ -51,7 +51,7 @@ export const FileItem = (props: FileItemProps) => {
                     name={isCheck ? 'check-circle' : 'circle-thin'}
                     color={isCheck ? '#00bfff' : 'gray'}
                     size={16}
-                    onPress={() => { switchCheck(file.id) }}>
+                >
                 </Icon> : null
             }
         </View >
@@ -64,6 +64,6 @@ const styles = StyleSheet.create({
         width: '33%', maxWidth: '33%'
     },
     fileItem: {
-        padding: 0, margin: 0, justifyContent: 'center', alignItems: 'center'
+        padding: 0, margin: 0, justifyContent: 'center', alignItems: 'center', marginTop: 10
     }
 })

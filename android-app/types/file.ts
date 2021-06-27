@@ -8,7 +8,7 @@ export interface fileParams {
 
 export interface NewFolderParams {
   folderName?: string;
-  parentFolderId: string;
+  parentFolderId: number;
 }
 
 // 响应数据

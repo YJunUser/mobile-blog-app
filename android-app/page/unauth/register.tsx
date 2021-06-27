@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import { getEmailCode } from "../../api/auth";
 import { useAuth } from "../../context/auth-context";
 import { UserRegister } from "../../types/auth";
-import { checkEmail, useCountDown } from "../../utils";
+import { useCountDown } from "../../utils";
 
 const RegisterScreen = () => {
   const [username, onChangeUsername] = useState<string>('')

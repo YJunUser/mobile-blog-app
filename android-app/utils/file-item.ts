@@ -10,10 +10,10 @@ export const useFileItem = (params: fileParams) => {
     })
 }
 
-export const useNewFolder = (params: NewFolderParams) => {
+export const useNewFolder = () => {
     const queryClient = useQueryClient()
     return useMutation(
-        async () => {
+        async (params: NewFolderParams) => {
             const res = await newFolder(params);
             console.log(res)
         },

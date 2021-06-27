@@ -1,4 +1,4 @@
-import { useRoute } from '@react-navigation/native'
+import { useFocusEffect, useRoute } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import { useQueryClient } from 'react-query'
@@ -11,9 +11,9 @@ import { EditModal } from '../../components/modal/editModal'
 import { fileData, fileParams } from '../../types/file';
 
 
+
 const FileScreen = ({ navigation }: { navigation: any }) => {
     const route = useRoute()
-    console.log(route)
     const file: any = route.params['file']
 
     const queryClient = useQueryClient()
@@ -33,10 +33,15 @@ const FileScreen = ({ navigation }: { navigation: any }) => {
     const [select, setSelect] = useState<number[]>([])
 
     const goFileScreen = (params: fileData) => {
-        navigation.push('FileScreen', {
-            file: params
-        })
+        if (params.isDirectory) {
+            navigation.push('FileScreen', {
+                file: params
+            })
+        } else {
+            //...
+        }
     }
+
 
     return (
         <ScrollView showsVerticalScrollIndicator={false}
@@ -50,7 +55,7 @@ const FileScreen = ({ navigation }: { navigation: any }) => {
                     fileData?.map((item) => <FileItem file={item} key={item.name} setSelect={setSelect} select={select} goFileScreen={goFileScreen}></FileItem>)
                 }
             </View>
-            <UsingModal></UsingModal>
+            <UsingModal presentFolderId={file.id}></UsingModal>
             <EditModal></EditModal>
         </ScrollView >
     )

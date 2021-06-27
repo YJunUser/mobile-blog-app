@@ -8,6 +8,7 @@ import { useImagePicker } from '../../utils/camera'
 import { uploadFiles } from '../../utils/uploadFiles'
 import { apiBaseUrl } from '../../api'
 
+
 const ProfileScreen = () => {
   const { user, setUser, token } = useAuth()
 

@@ -19,7 +19,9 @@ interface ContextStore {
   setOpen: (isOpen: boolean) => void;
   token: string | null; // null代表还没登陆
   isEdit: boolean,
-  setEdit: (isEdit: boolean) => void
+  setEdit: (isEdit: boolean) => void,
+  isDrawer: boolean,
+  setDrawer: (isGesture: boolean) => void
 }
 
 // create a store 
@@ -35,6 +37,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isError, setError] = useState<boolean>(false)
   const [isEdit, setEdit] = useState<boolean>(false)
   const [isOpen, setOpen] = useState<boolean>(false)
+  const [isDrawer, setDrawer] = useState<boolean>(true)
 
   const login = (params: UserLogin) => {
     return userLogin(params).then(res => {
@@ -123,7 +126,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, isOpen, setOpen, token, isEdit, setEdit, setUser }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user, login, register, logout, isOpen, setOpen, token, isEdit, setEdit, setUser, isDrawer, setDrawer }}>{children}</AuthContext.Provider>
   )
 }
 

@@ -4,11 +4,30 @@ import { ModalComponent } from '.';
 import Icon from 'react-native-vector-icons/AntDesign';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import RNFileSelector from 'react-native-file-selector';
-import {  useUsingModal } from './utils';
+import { useUsingModal } from './utils';
+import { useState } from 'react';
+import { useNewFolder } from '../../utils/file-item';
 
-export const UsingModal = () => {
-  const {isModalVisible, toggleFileSelector, toggleFolder, toggleModal, list, isFileSelectorVisible, isFolderVisible, isEdit} = useUsingModal()
+export const UsingModal = ({ presentFolderId }: { presentFolderId: number }) => {
+  const { isModalVisible, toggleFileSelector, toggleFolder, toggleModal, list, isFileSelectorVisible, isFolderVisible, isEdit } = useUsingModal()
+  const [folderName, setName] = useState<string>('')
+  const { mutateAsync, isLoading } = useNewFolder()
 
+  const toggleFolderDone = async () => {
+    try {
+      await mutateAsync({
+        folderName: folderName,
+        parentFolderId: presentFolderId
+      })
+    } catch (error) {
+      console.log(error)
+    }
+    toggleFolder()
+  }
+
+  const toggleFolderQuit = () => {
+    toggleFolder()
+  }
 
   return (
     <>
@@ -20,12 +39,12 @@ export const UsingModal = () => {
         isVisible={isFolderVisible}
         toggleModal={toggleFolder}
         ModalStyle={styles.folderModal}
-        rightTopChildren={<TouchableNativeFeedback onPress={toggleFolder}><Text style={{ color: '#6a5acd', fontWeight: 'bold' }}>完成</Text></TouchableNativeFeedback>}
-        leftTopChildren={<TouchableNativeFeedback onPress={toggleFolder}><Text style={{ color: '#000000' }}>取消</Text></TouchableNativeFeedback>}
+        rightTopChildren={<TouchableNativeFeedback onPress={toggleFolderDone}><Text style={{ color: '#6a5acd', fontWeight: 'bold' }}>{isLoading ? '稍等...' : '完成'}</Text></TouchableNativeFeedback>}
+        leftTopChildren={<TouchableNativeFeedback onPress={toggleFolderQuit}><Text style={{ color: '#000000' }}>取消</Text></TouchableNativeFeedback>}
         contentChildren={
           <View style={styles.folderModalContent}>
             <EntypoIcon name='folder' size={150} color={'#6495ed'}></EntypoIcon>
-            <TextInput style={styles.folderName} placeholder={'新建文件夹'} focusable={true}></TextInput>
+            <TextInput style={styles.folderName} placeholder={'新建文件夹'} focusable={true} value={folderName} onChangeText={setName}></TextInput>
           </View>
         }
       >

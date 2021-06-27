@@ -41,6 +41,8 @@ export const useUsingModal = () => {
     const [isFileSelectorVisible, setFileSelectorVisible] = useState<boolean>(false)
     const [isFolderVisible, setFolderVisible] = useState<boolean>(false)
     const { isEdit } = useAuth()
+  
+
 
     const openImagePicker = useImagePicker()
     const openCamera = useCamera()
@@ -55,6 +57,7 @@ export const useUsingModal = () => {
         setModalVisible(false)
         setFolderVisible(!isFolderVisible)
     }
+
     const getPictureByCamera = async () => {
         const result = await openCamera()
         console.log(result)

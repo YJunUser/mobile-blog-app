@@ -1,27 +1,42 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Avatar, Icon, ListItem } from 'react-native-elements'
+import { apiBaseUrl } from '../../api';
 import { baseStyles } from '../../assets/styles';
+import { useAuth } from '../../context/auth-context';
 import * as RootNavigation from '../../RootNavigation'
 import { styles } from './styles';
 import { useMenu } from './utils';
 
 export const Menu = (): JSX.Element => {
 
+  const { user } = useAuth()
   const { list, setOpen, isOpen } = useMenu()
 
+  const isAvatar = user && user.avatar
   return (
     <View style={[styles.container, styles.navigationContainer]}>
       <View style={styles.header}>
-        <Avatar rounded icon={{ name: 'user-circle-o', type: 'font-awesome', color: 'white' }} size='large' onPress={() => {
-          // close drawer first
-          setOpen(!isOpen)
-          // delay time and user can see it
-          setTimeout(() => {
-            RootNavigation.navigate('ProfileScreen')
-          }, 500);
-        }}>
-        </Avatar>
+        {
+          isAvatar ? <Avatar rounded size='large' source={{ uri: apiBaseUrl + user.avatar }} onPress={() => {
+            // close drawer first
+            setOpen(!isOpen)
+            // delay time and user can see it
+            setTimeout(() => {
+              RootNavigation.navigate('ProfileScreen')
+            }, 500);
+          }}>
+          </Avatar> :
+            <Avatar rounded size='large' icon={{ name: 'user-circle-o', type: 'font-awesome', color: 'white' }} onPress={() => {
+              // close drawer first
+              setOpen(!isOpen)
+              // delay time and user can see it
+              setTimeout(() => {
+                RootNavigation.navigate('ProfileScreen')
+              }, 500);
+            }}>
+            </Avatar>
+        }
         <TouchableOpacity style={styles.button}>
           <View style={[baseStyles.row]}>
             <Text style={styles.scan}>桌面端</Text>
