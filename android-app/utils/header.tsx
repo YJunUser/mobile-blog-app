@@ -1,8 +1,8 @@
-import { getFocusedRouteNameFromRoute, Route } from "@react-navigation/native";
+import { getFocusedRouteNameFromRoute, Route, useNavigation } from "@react-navigation/native";
 import { TabHeader } from "../components/header";
 import { Text, StyleSheet, View } from 'react-native'
 import React from "react";
-
+import * as RootNavigation from '../RootNavigation'
 // 根据不同的路由导入不同的header
 // eslint-disable-next-line @typescript-eslint/ban-types
 export function getHeaderTitle(route: Partial<Route<string, object>>): () => JSX.Element {
@@ -29,10 +29,19 @@ export function getEditHeader(setEdit: (isEdit: boolean) => void): () => JSX.Ele
     return (
       <View style={{ flexDirection: 'row', flexWrap: 'nowrap', justifyContent: 'space-between', alignItems: 'center' }}>
         <Text onPress={() => setEdit(false)}>取消</Text>
-        <Text style={{color: '#000000', fontWeight: 'bold', fontSize: 16}}>编辑文件</Text>
+        <Text style={{ color: '#000000', fontWeight: 'bold', fontSize: 16 }}>编辑文件</Text>
         <Text style={{ color: '#1e90ff' }} onPress={() => setEdit(false)}>完成</Text>
       </View>
     )
+  }
+}
+
+export function recycleHeaderLeft(isEdit: boolean): () => JSX.Element {
+
+  if (isEdit) {
+    return null
+  } else {
+    return () => <Text style={{ marginLeft: 10 }} onPress={() => RootNavigation.navigate('HomeScreen')}>返回</Text>
   }
 }
 

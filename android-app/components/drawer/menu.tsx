@@ -49,8 +49,8 @@ export const Menu = (): JSX.Element => {
         <Text style={styles.paragraph}>姚伯骏</Text>
         {
           list.map((item, index) => (
-            <ListItem key={index} containerStyle={{ backgroundColor: '#000000', margin: 10, padding: 0, marginLeft: 0, }}>
-              <Icon name={item.icon} type={item.iconType} color={item.iconColor} size={item.size} onPress={item.handler}></Icon>
+            <ListItem key={index} containerStyle={{ backgroundColor: '#000000', margin: 10, padding: 0, marginLeft: 0, }} onPress={item.handler}>
+              <Icon name={item.icon} type={item.iconType} color={item.iconColor} size={item.size} ></Icon>
               <ListItem.Content>
                 <ListItem.Title style={{ color: '#ffffff', fontSize: 15 }}>{item.title}</ListItem.Title>
               </ListItem.Content>

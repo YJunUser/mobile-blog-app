@@ -11,11 +11,12 @@ interface FileItemProps {
     file: fileData,
     setSelect: (select: fileData[]) => void,
     select: fileData[],
-    goFileScreen: (params: fileData) => void
+    goFileScreen?: (params: fileData) => void,
+    isRecycle?: boolean
 }
 
 export const FileItem = (props: FileItemProps) => {
-    const { file, setSelect, select, goFileScreen } = props
+    const { file, setSelect, select, goFileScreen, isRecycle=false } = props
     const [isCheck, setCheck] = useState<boolean>(false)
     const { isEdit, setEdit } = useAuth()
 
@@ -33,11 +34,18 @@ export const FileItem = (props: FileItemProps) => {
             setCheck(true)
         }
     }
+    const itemPress = () => {
+        if(isRecycle) {
+            return  isEdit ? switchCheck(file) : null
+        } else {
+            return  isEdit ? switchCheck(file) : goFileScreen(file)
+        }
+    }
 
     return (
         <View style={[styles.container, styles.fileItem]}>
             <TouchableScale
-                onPress={() => { isEdit ? switchCheck(file) : goFileScreen(file) }}
+                onPress={() => { itemPress() }}
                 onLongPress={() => {
                     setEdit(true)
                 }}

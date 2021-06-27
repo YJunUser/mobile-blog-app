@@ -1,12 +1,13 @@
 
 import React from 'react'
-import { Text, View, StyleSheet } from 'react-native'
+import { Text, View } from 'react-native'
 import { ListItem, Avatar } from 'react-native-elements'
 import { baseStyles } from '../../assets/styles'
 import { useAuth } from '../../context/auth-context'
 import { useImagePicker } from '../../utils/camera'
 import { uploadFiles } from '../../utils/uploadFiles'
 import { apiBaseUrl } from '../../api'
+import { styles } from './style'
 
 
 const ProfileScreen = () => {
@@ -64,36 +65,6 @@ const ProfileScreen = () => {
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 20
-  },
-  avatarListItem: {
-    borderRadius: 10,
-    marginTop: 20,
-    padding: 0,
-    paddingLeft: 10
-  },
-  listItem: {
-    borderRadius: 10,
-    marginTop: 20,
-    padding: 10,
-    paddingRight: 0
-
-  },
-  avatarContent: {
-    justifyContent: 'space-between',
-    width: '110%',
-    paddingTop: 20,
-    paddingBottom: 20,
-    paddingRight: 10
-  },
-  content: {
-    justifyContent: 'space-between',
-    width: '105%'
-  }
-})
 
 
 

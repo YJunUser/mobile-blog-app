@@ -1,6 +1,6 @@
-import { useFocusEffect, useRoute } from '@react-navigation/native'
+import { useRoute } from '@react-navigation/native'
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, ScrollView } from 'react-native'
+import { View, ScrollView, ActivityIndicator } from 'react-native'
 import { useQueryClient } from 'react-query'
 import { useRefresh } from '../../components/refresh'
 import { styles } from './style'
@@ -27,7 +27,7 @@ const FileScreen = ({ navigation }: { navigation: any }) => {
         folderId: file.id
     }
 
-    const { data: fileData, isError, isLoading, error } = useFileItem(fileParams)
+    const { data: fileDatas, isLoading } = useFileItem(fileParams)
 
 
     const [select, setSelect] = useState<fileData[]>([])
@@ -50,13 +50,15 @@ const FileScreen = ({ navigation }: { navigation: any }) => {
             contentContainerStyle={styles.content}
         >
 
-            <View style={styles.fileContainer}>
-                {
-                    fileData?.map((item) => <FileItem file={item} key={item.name} setSelect={setSelect} select={select} goFileScreen={goFileScreen}></FileItem>)
-                }
-            </View>
+            {
+                isLoading ? <ActivityIndicator size="large" color="#00ff00" /> : <View style={styles.fileContainer}>
+                    {
+                        fileDatas ? fileDatas?.map((item) => <FileItem file={item} key={item.name} setSelect={setSelect} select={select} goFileScreen={goFileScreen}></FileItem>) : null
+                    }
+                </View>
+            }
             <UsingModal presentFolderId={file.id}></UsingModal>
-            <EditModal selectedFiles={select}></EditModal>
+            <EditModal selectedFiles={select} isRecycle={false}></EditModal>
         </ScrollView >
     )
 }

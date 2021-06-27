@@ -10,11 +10,13 @@ export const uploadFiles = async (config: UploadConfig) => {
     const { url, filePath, token } = config
 
     const path = filePath.replace("file://", "");
+    const arr = path.split('/')
+    const name = arr[arr.length - 1]
     const formData = []
 
     formData.push({
         name: "file",
-        filename: `photo.jpg`,
+        filename: name,
         data: RNFetchBlob.wrap(path)
     });
 

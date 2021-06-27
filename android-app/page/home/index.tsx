@@ -8,7 +8,6 @@ import { fileData, fileParams } from '../../types/file';
 import { FileItem } from '../../components/FileItem';
 import { EditModal } from '../../components/modal/editModal';
 import { useReloadFile } from './utils';
-import { useEffect } from 'react';
 
 
 const HomeScreen = ({ navigation }: { navigation: any }) => {
@@ -19,15 +18,10 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
   const fileParams: fileParams = {
     fileStatus: 'unRecycled',
   }
-  const { data: fileDatas, isError, isLoading, error } = useFileItem(fileParams)
+  const { data: fileDatas, isLoading } = useFileItem(fileParams)
 
   const [select, setSelect] = useState<fileData[]>([])
 
-
-  useEffect(() => {
-    console.log(select)
-
-  }, [select])
 
   const goFileScreen = (params: fileData) => {
     if (params.isDirectory) {
@@ -41,13 +35,12 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
 
 
   return (
-    // <View style={{ height: '100%' }}>
+ 
     <ScrollView showsVerticalScrollIndicator={false}
       refreshControl={renderRefreshControl()}
       style={styles.container}
       contentContainerStyle={styles.content}
     >
-      
 
       {
         isLoading ? <ActivityIndicator size="large" color="#00ff00" /> : <View style={styles.fileContainer}>
@@ -57,9 +50,9 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
         </View>
       }
       <UsingModal presentFolderId={0}></UsingModal>
-      <EditModal selectedFiles={select}></EditModal>
+      <EditModal selectedFiles={select} isRecycle={false}></EditModal>
     </ScrollView >
-    // </View>
+  
   );
 };
 

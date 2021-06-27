@@ -4,18 +4,20 @@ import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Drawer } from './components/drawer';
 import { ListScreen } from './page/list';
-import { getEditHeader, getHeaderTitle } from './utils/header';
+import { getEditHeader, getHeaderTitle, recycleHeaderLeft } from './utils/header';
 import { useAuth } from './context/auth-context';
 import { Suspense } from 'react';
+import {Text} from 'react-native'
 
 import ProfileScreen from './page/profile/index';
 import FullPageLoading from './components/FullPageActive/FullPageLoading';
+import FileScreen from './page/file-detail';
+import RecycleFileScreen from './page/recycle-file';
 
 // lazy components
 const HomeScreen = React.lazy(() => import('./page/home/index'))
 const LoginScreen = React.lazy(() => import('./page/unauth/login'))
 const RegisterScreen = React.lazy(() => import('./page/unauth/register'))
-const FileScreen = React.lazy(() => import('./page/file-detail/index'))
 
 
 
@@ -89,6 +91,17 @@ export const AndroidApp = () => {
                   component={FileScreen}
                   options={({ route }) => ({
                     headerTitle: '文件',
+                    gestureDirection: 'horizontal', // 手势的方向
+                    gestureEnabled: true, // 启用安卓的手势返回
+                    cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS // 将ios翻页动画应用到安卓上
+                  })}
+                />
+                <Stack.Screen
+                  name='RecycleFileScreen'
+                  component={RecycleFileScreen}
+                  options={({ route }) => ({
+                    headerTitle: isEdit ? getEditHeader(setEdit) : () => <Text style={{marginLeft: 100, fontWeight: 'bold'}}>回收站</Text>,
+                    headerLeft: recycleHeaderLeft(isEdit),
                     gestureDirection: 'horizontal', // 手势的方向
                     gestureEnabled: true, // 启用安卓的手势返回
                     cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS // 将ios翻页动画应用到安卓上

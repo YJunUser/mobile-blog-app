@@ -3,13 +3,14 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { ModalComponent } from '.';
 import { useAuth } from '../../context/auth-context';
 import { StyleSheet, View, Text } from 'react-native'
-import { useEdit } from './utils';
+import { useEdit, useRecycle } from './utils';
 import { fileData } from '../../types/file';
 
 
-export const EditModal = ({ selectedFiles }: { selectedFiles: fileData[] }) => {
+export const EditModal = ({ selectedFiles, isRecycle }: { selectedFiles: fileData[], isRecycle: boolean }) => {
     const { isEdit } = useAuth()
-    const { editItemList } = useEdit(selectedFiles)
+    const editItemList = useEdit(selectedFiles)
+    const recycleItemList = useRecycle(selectedFiles)
     return (
         <ModalComponent
             hasBackdrop={false}
@@ -22,14 +23,23 @@ export const EditModal = ({ selectedFiles }: { selectedFiles: fileData[] }) => {
             contentChildren={
                 <View style={styles.editContent}>
                     {
-                        editItemList.map((item) => {
-                            return (
-                                <View style={styles.editItem} key={item.name}>
-                                    <Icon name={item.icon} color={item.color} size={item.size || 18} onPress={item.handle}></Icon>
-                                    <Text style={{ fontSize: 12, marginTop: 5, color: item.color }}>{item.name}</Text>
-                                </View>
-                            )
-                        })
+                        isRecycle ?
+                            recycleItemList.map((item) => {
+                                return (
+                                    <View style={styles.editItem} key={item.name}>
+                                        <Icon name={item.icon} color={item.color} size={item.size || 18} onPress={item.handle}></Icon>
+                                        <Text style={{ fontSize: 12, marginTop: 5, color: item.color }}>{item.name}</Text>
+                                    </View>
+                                )
+                            }) :
+                            editItemList.map((item) => {
+                                return (
+                                    <View style={styles.editItem} key={item.name}>
+                                        <Icon name={item.icon} color={item.color} size={item.size || 18} onPress={item.handle}></Icon>
+                                        <Text style={{ fontSize: 12, marginTop: 5, color: item.color }}>{item.name}</Text>
+                                    </View>
+                                )
+                            })
                     }
                 </View>
             }>

@@ -29,6 +29,9 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import { LogBox } from 'react-native';
 
 LogBox.ignoreLogs(['Setting a timer']);
+LogBox.ignoreLogs([
+  'Require cycle:'
+])
 
 
 const App = () => {

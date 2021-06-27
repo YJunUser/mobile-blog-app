@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "react-query"
-import { getFile, newFolder, recycleFiles } from "../api/file"
-import { fileParams, NewFolderParams, RecycleFiles } from "../types/file"
+import { deleteFiles, getFile, newFolder, recoveryFiles, recycleFiles } from "../api/file"
+import { fileParams, NewFolderParams, RecoveryFiles, RecycleFiles } from "../types/file"
 
 
 export const useFileItem = (params: fileParams) => {
@@ -14,8 +14,7 @@ export const useNewFolder = () => {
     const queryClient = useQueryClient()
     return useMutation(
         async (params: NewFolderParams) => {
-            const res = await newFolder(params);
-            console.log(res)
+            await newFolder(params);
         },
         {
             onSuccess: () => queryClient.invalidateQueries('fileData')
@@ -27,8 +26,31 @@ export const useRecycleFiles = () => {
     const queryClient = useQueryClient()
     return useMutation(
         async (params: RecycleFiles) => {
-            const res = await recycleFiles(params);
-            console.log(res)
+            await recycleFiles(params);
+        },
+        {
+            onSuccess: () => queryClient.invalidateQueries('fileData')
+        }
+    )
+}
+
+export const useRecoveryFiles = () => {
+    const queryClient = useQueryClient()
+    return useMutation(
+        async (params: RecoveryFiles) => {
+            await recoveryFiles(params);
+        },
+        {
+            onSuccess: () => queryClient.invalidateQueries('fileData')
+        }
+    )
+}
+
+export const useDeleteFiles = () => {
+    const queryClient = useQueryClient()
+    return useMutation(
+        async (params: RecoveryFiles) => {
+            await deleteFiles(params);
         },
         {
             onSuccess: () => queryClient.invalidateQueries('fileData')

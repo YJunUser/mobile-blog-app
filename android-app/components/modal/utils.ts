@@ -3,7 +3,7 @@ import { Alert, ToastAndroid } from 'react-native';
 import { useAuth } from '../../context/auth-context';
 import { fileData } from '../../types/file';
 import { useCamera, useImagePicker } from '../../utils/camera';
-import { useRecycleFiles } from '../../utils/file-item';
+import { useDeleteFiles, useRecoveryFiles, useRecycleFiles } from '../../utils/file-item';
 
 interface EditItem {
     icon: string;
@@ -59,7 +59,68 @@ export const useEdit = (selectedFiles: fileData[]) => {
         handle: confirmDelete
     }]
 
-    return { editItemList }
+    return  editItemList 
+}
+
+export const useRecycle = (selectedFiles: fileData[]) => {
+    const { mutateAsync: recoveryAsync } = useRecoveryFiles()
+    const { mutateAsync: deleteAsync } = useDeleteFiles()
+    const confirmDelete = () => {
+        Alert.alert('确认清空吗', '清空后不可找回',
+            [
+                {
+                    text: "取消",
+                },
+                {
+                    text: "确认", onPress: () => {
+                        console.log(selectedFiles)
+                        selectedFiles.forEach(async (item) => {
+                            await deleteAsync({
+                                id: item.id,
+                                isDirectory: item.isDirectory
+                            })
+                        })
+                        ToastAndroid.showWithGravity('删除成功', ToastAndroid.LONG, ToastAndroid.CENTER)
+                    }
+                },
+            ]
+        );
+    }
+    const confirmRecovery = () => {
+        Alert.alert('确认恢复吗','恢复后可在主页中找到',
+        [
+            {
+                text: "取消",
+            },
+            {
+                text: "确认", onPress: () => {
+                    console.log(selectedFiles)
+                    selectedFiles.forEach(async (item) => {
+                        await recoveryAsync({
+                            id: item.id,
+                            isDirectory: item.isDirectory
+                        })
+                    })
+                    ToastAndroid.showWithGravity('恢复成功', ToastAndroid.LONG, ToastAndroid.CENTER)
+                }
+            },
+        ]
+    );
+    }
+
+    const editItemList: EditItem[] = [ {
+        icon: 'repeat',
+        color: '#000000',
+        name: '恢复',
+        handle: confirmRecovery
+    }, {
+        icon: 'close',
+        color: 'red',
+        name: '清空',
+        handle: confirmDelete
+    }]
+
+    return  editItemList 
 }
 
 export const useUsingModal = () => {
@@ -135,3 +196,4 @@ export const useUsingModal = () => {
         getPictureByPicker
     }
 }
+

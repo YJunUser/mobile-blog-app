@@ -16,6 +16,10 @@ export interface RecycleFiles {
   isDirectory: boolean;
 }
 
+export interface RecoveryFiles {
+  id: number;
+  isDirectory: boolean;
+}
 // 响应数据
 type FileType = 'doc' | 'excel' | 'execute' | 'md' | 'pdf' | 'ppt' | 'sound' | 'txt' | 'unknown' | 'zip'
 export interface fileData {
