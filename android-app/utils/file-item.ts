@@ -1,11 +1,24 @@
-import { useQuery } from "react-query"
-import { getFile } from "../api/file"
-import { fileParams } from "../types/file"
+import { useMutation, useQuery, useQueryClient } from "react-query"
+import { getFile, newFolder } from "../api/file"
+import { fileParams, NewFolderParams } from "../types/file"
 
 
 export const useFileItem = (params: fileParams) => {
-    return useQuery("fileData", async () => {
+    return useQuery(['fileData', params], async () => {
         const res = await getFile(params)
         return res.data.data
     })
+}
+
+export const useNewFolder = (params: NewFolderParams) => {
+    const queryClient = useQueryClient()
+    return useMutation(
+        async () => {
+            const res = await newFolder(params);
+            console.log(res)
+        },
+        {
+            onSuccess: () => queryClient.invalidateQueries('fileData')
+        }
+    )
 }

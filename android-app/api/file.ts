@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios'
-import { fileData, fileParams } from '../types/file'
+import { fileData, fileParams, NewFolderParams } from '../types/file'
 import http, { ResponseData } from './index'
 
 export const getFile = (params: fileParams): Promise<AxiosResponse<ResponseData<fileData[]>>> => {
@@ -7,5 +7,13 @@ export const getFile = (params: fileParams): Promise<AxiosResponse<ResponseData<
         url: '/sharer-api/files',
         method: 'get',
         params
+    })
+}
+
+export const newFolder = (param: NewFolderParams): Promise<AxiosResponse<ResponseData<boolean>>> => {
+    return http.request({
+        url: '/sharer-api/files/{id}',
+        method: 'post',
+        data: param
     })
 }

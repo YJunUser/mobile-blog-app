@@ -10,6 +10,7 @@ export const Drawer = ({
   children: React.ReactNode;
 }) => {
   const { isOpen, setOpen } = useAuth()
+  console.log(isOpen)
 
   return (
     <SideMenu disableGestures={false} menu={<Menu />} isOpen={isOpen} autoClosing={true} onChange={() => setOpen(!isOpen)}>

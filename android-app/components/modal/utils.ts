@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '../../context/auth-context';
 import { useCamera, useImagePicker } from '../../utils/camera';
+import { useNewFolder } from '../../utils/file-item';
 interface EditItem {
     icon: string;
     color: string;

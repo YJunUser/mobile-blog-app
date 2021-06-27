@@ -6,16 +6,19 @@ import { GetIcon } from './file-icon';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useAuth } from '../../context/auth-context';
 
+
 interface FileItemProps {
     file: fileData,
     setSelect: (select: number[]) => void,
-    select: number[]
+    select: number[],
+    goFileScreen: (params: fileData) => void
 }
 
 export const FileItem = (props: FileItemProps) => {
-    const { file, setSelect, select } = props
+    const { file, setSelect, select, goFileScreen } = props
     const [isCheck, setCheck] = useState<boolean>(false)
     const { isEdit, setEdit } = useAuth()
+    console.log(file)
 
     const switchCheck = (id: number): void => {
         if (select.includes(id)) {
@@ -35,7 +38,7 @@ export const FileItem = (props: FileItemProps) => {
     return (
         <View style={[styles.container, styles.fileItem]}>
             <TouchableScale
-                onPress={() => console.log('im press')}
+                onPress={() => goFileScreen(file)}
                 onLongPress={() => {
                     setEdit(true)
                 }}

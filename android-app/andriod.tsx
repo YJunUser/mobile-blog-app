@@ -15,6 +15,8 @@ import FullPageLoading from './components/FullPageActive/FullPageLoading';
 const HomeScreen = React.lazy(() => import('./page/home/index'))
 const LoginScreen = React.lazy(() => import('./page/unauth/login'))
 const RegisterScreen = React.lazy(() => import('./page/unauth/register'))
+const FileScreen = React.lazy(() => import('./page/file-detail/index'))
+
 
 
 // Tab-bar Screen
@@ -77,6 +79,16 @@ export const AndroidApp = () => {
                   component={ProfileScreen}
                   options={({ route }) => ({
                     headerTitle: getHeaderTitle(route),
+                    gestureDirection: 'horizontal', // 手势的方向
+                    gestureEnabled: true, // 启用安卓的手势返回
+                    cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS // 将ios翻页动画应用到安卓上
+                  })}
+                />
+                <Stack.Screen
+                  name='FileScreen'
+                  component={FileScreen}
+                  options={({ route }) => ({
+                    headerTitle: '文件',
                     gestureDirection: 'horizontal', // 手势的方向
                     gestureEnabled: true, // 启用安卓的手势返回
                     cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS // 将ios翻页动画应用到安卓上

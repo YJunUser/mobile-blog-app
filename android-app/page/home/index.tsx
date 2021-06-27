@@ -4,18 +4,18 @@ import { useRefresh } from '../../components/refresh';
 import { styles } from './style';
 import { UsingModal } from '../../components/modal/usingModal';
 import { useFileItem } from '../../utils/file-item';
-import { fileParams } from '../../types/file';
+import { fileData, fileParams } from '../../types/file';
 import { FileItem } from '../../components/FileItem';
 import { EditModal } from '../../components/modal/editModal';
 import { useQueryClient } from 'react-query';
 
-const HomeScreen = () => {
+
+const HomeScreen = ({ navigation }: { navigation: any }) => {
 
   const queryClient = useQueryClient()
   const reloadData = () => {
     return queryClient.invalidateQueries('fileData')
   }
-
   const { renderRefreshControl } = useRefresh({ loadData: reloadData })
 
   const fileParams: fileParams = {
@@ -23,9 +23,13 @@ const HomeScreen = () => {
   }
 
   const { data: fileData, isError, isLoading, error } = useFileItem(fileParams)
-
   const [select, setSelect] = useState<number[]>([])
 
+  const goFileScreen = (params: fileData) => {
+    navigation.push('FileScreen', {
+      file: params
+    })
+  }
 
 
   return (
@@ -38,7 +42,7 @@ const HomeScreen = () => {
 
       <View style={styles.fileContainer}>
         {
-          fileData?.map((item) => <FileItem file={item} key={item.size} setSelect={setSelect} select={select}></FileItem>)
+          fileData ? fileData?.map((item) => <FileItem file={item} key={item.name} setSelect={setSelect} select={select} goFileScreen={goFileScreen}></FileItem>) : null
         }
       </View>
       <UsingModal></UsingModal>

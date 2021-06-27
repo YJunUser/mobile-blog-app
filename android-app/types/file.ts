@@ -6,6 +6,11 @@ export interface fileParams {
  folderId?: number // 不传显示根目录
 }
 
+export interface NewFolderParams {
+  folderName?: string;
+  parentFolderId: string;
+}
+
 // 响应数据
 type FileType = 'doc' | 'excel' | 'execute' | 'md' | 'pdf' | 'ppt' | 'sound' | 'txt' | 'unknown' | 'zip'
 export interface fileData {
