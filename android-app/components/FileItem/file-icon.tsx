@@ -23,9 +23,11 @@ export const GetIcon = ({type} : {type: string}): JSX.Element => {
             return (<Image source={require('../../assets/image/exe.png')} style={{ width: 60, height: 60 }}></Image>)
         case 'ppt':
             return (<Image source={require('../../assets/image/ppt.png')} style={{ width: 60, height: 60 }}></Image>)
+        case 'image':
+            return (<Image source={require('../../assets/image/images.png')} style={{ width: 60, height: 60 }}></Image>)
         // case 'png':
         //     return()
         default:
-            return (<Image source={require('../../assets/image/folder.png')} style={{ width: 60, height: 60 }}></Image>)
+            return (<Image source={require('../../assets/image/Folder.png')} style={{ width: 60, height: 60 }}></Image>)
     }
 }
