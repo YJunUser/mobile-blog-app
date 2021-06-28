@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { ActivityIndicator, ScrollView, View, Text } from 'react-native'
 import { useRefresh } from '../../components/refresh'
-import { useReloadFile } from '../home/utils'
+import { useReloadFile } from '../../utils/index'
 import { styles } from './style'
 import { fileData, fileParams } from '../../types/file';
 import { useFileItem } from '../../utils/file-item'
@@ -35,7 +35,7 @@ const RecycleFileScreen = () => {
                     }
                 </View>
             }
-            <EditModal selectedFiles={select} isRecycle={true}></EditModal>
+            <EditModal selectedFiles={select} isRecycle={true} setSelect={setSelect}></EditModal>
         </ScrollView >
     )
 }

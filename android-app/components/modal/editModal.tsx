@@ -6,11 +6,17 @@ import { StyleSheet, View, Text } from 'react-native'
 import { useEdit, useRecycle } from './utils';
 import { fileData } from '../../types/file';
 
+interface EditModalProps {
+    selectedFiles: fileData[];
+    setSelect: (selectedFiles: fileData[]) => void;
+    isRecycle: boolean;
+}
 
-export const EditModal = ({ selectedFiles, isRecycle }: { selectedFiles: fileData[], isRecycle: boolean }) => {
+export const EditModal = (editProps: EditModalProps) => {
+    const {selectedFiles, setSelect, isRecycle} = editProps
     const { isEdit } = useAuth()
-    const editItemList = useEdit(selectedFiles)
-    const recycleItemList = useRecycle(selectedFiles)
+    const editItemList = useEdit(selectedFiles, setSelect)
+    const recycleItemList = useRecycle(selectedFiles, setSelect)
     return (
         <ModalComponent
             hasBackdrop={false}

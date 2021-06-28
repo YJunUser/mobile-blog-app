@@ -58,7 +58,7 @@ const FileScreen = ({ navigation }: { navigation: any }) => {
                 </View>
             }
             <UsingModal presentFolderId={file.id}></UsingModal>
-            <EditModal selectedFiles={select} isRecycle={false}></EditModal>
+            <EditModal selectedFiles={select} isRecycle={false} setSelect={setSelect}></EditModal>
         </ScrollView >
     )
 }

@@ -7,7 +7,7 @@ import { useFileItem } from '../../utils/file-item';
 import { fileData, fileParams } from '../../types/file';
 import { FileItem } from '../../components/FileItem';
 import { EditModal } from '../../components/modal/editModal';
-import { useReloadFile } from './utils';
+import { useReloadFile } from '../../utils/index';
 
 
 const HomeScreen = ({ navigation }: { navigation: any }) => {
@@ -50,7 +50,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
         </View>
       }
       <UsingModal presentFolderId={0}></UsingModal>
-      <EditModal selectedFiles={select} isRecycle={false}></EditModal>
+      <EditModal selectedFiles={select} isRecycle={false} setSelect={setSelect}></EditModal>
     </ScrollView >
   
   );

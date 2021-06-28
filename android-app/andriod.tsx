@@ -13,11 +13,11 @@ import ProfileScreen from './page/profile/index';
 import FullPageLoading from './components/FullPageActive/FullPageLoading';
 import FileScreen from './page/file-detail';
 import RecycleFileScreen from './page/recycle-file';
+import HomeScreen from './page/home';
+import LoginScreen from './page/unauth/login';
+import RegisterScreen from './page/unauth/register';
 
-// lazy components
-const HomeScreen = React.lazy(() => import('./page/home/index'))
-const LoginScreen = React.lazy(() => import('./page/unauth/login'))
-const RegisterScreen = React.lazy(() => import('./page/unauth/register'))
+
 
 
 

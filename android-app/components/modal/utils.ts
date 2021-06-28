@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Alert, ToastAndroid } from 'react-native';
 import { useAuth } from '../../context/auth-context';
 import { fileData } from '../../types/file';
+import { useReloadFile } from '../../utils';
 import { useCamera, useImagePicker } from '../../utils/camera';
 import { useDeleteFiles, useRecoveryFiles, useRecycleFiles } from '../../utils/file-item';
 
@@ -12,7 +13,7 @@ interface EditItem {
     name: string;
     handle?: () => void
 }
-export const useEdit = (selectedFiles: fileData[]) => {
+export const useEdit = (selectedFiles: fileData[], setSelect:(selectFiles: fileData[]) => void) => {
     const { mutateAsync } = useRecycleFiles()
     const confirmDelete = () => {
         Alert.alert('确认删除吗', '删除后可以在回收站中找到',
@@ -22,7 +23,7 @@ export const useEdit = (selectedFiles: fileData[]) => {
                 },
                 {
                     text: "确认", onPress: () => {
-                        console.log(selectedFiles)
+                        setSelect([])
                         selectedFiles.forEach(async (item) => {
                             await mutateAsync({
                                 id: item.id,
@@ -35,23 +36,46 @@ export const useEdit = (selectedFiles: fileData[]) => {
             ]
         );
     }
+    const confirmSharer = () => {
+        ToastAndroid.showWithGravity('分享功能升级中,敬请期待', ToastAndroid.SHORT, ToastAndroid.TOP)
+    }
+
+    const confirmCollect = () => {
+        ToastAndroid.showWithGravity('收藏功能升级中,敬请期待', ToastAndroid.SHORT, ToastAndroid.TOP)
+    }
+
+    const confirmDownload = () => {
+        ToastAndroid.showWithGravity('下载功能升级中,敬请期待', ToastAndroid.SHORT, ToastAndroid.TOP)
+    }
+
+    const confirmRename = () => {
+        // ToastAndroid.showWithGravity('重命名功能升级中,敬请期待', ToastAndroid.SHORT, ToastAndroid.TOP)
+        console.log(selectedFiles)
+        if(selectedFiles.length > 1) {
+            ToastAndroid.showWithGravity('一次只能重命名一个文件', ToastAndroid.SHORT, ToastAndroid.CENTER)
+        }
+    }
 
     const editItemList: EditItem[] = [{
         icon: 'share',
         color: '#c0c0c0',
-        name: '分享'
+        name: '分享',
+        handle: confirmSharer
     }, {
         icon: 'star-o',
         color: '#c0c0c0',
-        name: '收藏'
+        name: '收藏',
+        handle: confirmCollect
     }, {
         icon: 'arrow-circle-o-down',
-        color: '#000000',
-        name: '下载'
+        color: '#c0c0c0',
+        name: '下载',
+        handle: confirmDownload
     }, {
         icon: 'arrow-circle-o-right',
         color: '#c0c0c0',
-        name: '移动'
+        name: '重命名',
+        handle: confirmRename
     }, {
         icon: 'close',
         color: 'red',
@@ -62,7 +86,7 @@ export const useEdit = (selectedFiles: fileData[]) => {
     return  editItemList 
 }
 
-export const useRecycle = (selectedFiles: fileData[]) => {
+export const useRecycle = (selectedFiles: fileData[], setSelect:(selectFiles: fileData[]) => void) => {
     const { mutateAsync: recoveryAsync } = useRecoveryFiles()
     const { mutateAsync: deleteAsync } = useDeleteFiles()
     const confirmDelete = () => {
@@ -73,7 +97,7 @@ export const useRecycle = (selectedFiles: fileData[]) => {
                 },
                 {
                     text: "确认", onPress: () => {
-                        console.log(selectedFiles)
+                        setSelect([])
                         selectedFiles.forEach(async (item) => {
                             await deleteAsync({
                                 id: item.id,
@@ -81,6 +105,7 @@ export const useRecycle = (selectedFiles: fileData[]) => {
                             })
                         })
                         ToastAndroid.showWithGravity('删除成功', ToastAndroid.LONG, ToastAndroid.CENTER)
+  
                     }
                 },
             ]
@@ -94,7 +119,7 @@ export const useRecycle = (selectedFiles: fileData[]) => {
             },
             {
                 text: "确认", onPress: () => {
-                    console.log(selectedFiles)
+                    setSelect([])
                     selectedFiles.forEach(async (item) => {
                         await recoveryAsync({
                             id: item.id,

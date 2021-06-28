@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react"
+import { useQueryClient } from "react-query"
 
 
 export const useMount = (callback: () => void) => {
@@ -41,4 +42,12 @@ export const useCountDown = () => {
   }, [])
 
   return { onGetCaptcha, count, clear }
+}
+
+export const useReloadFile = () => {
+  const queryClient = useQueryClient()
+  const reloadData = () => {
+    return queryClient.invalidateQueries('fileData')
+  }
+  return reloadData
 }
