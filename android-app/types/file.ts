@@ -20,8 +20,13 @@ export interface RecoveryFiles {
   id: number;
   isDirectory: boolean;
 }
+
+export interface UploadConfig {
+  url: string;
+  uploadCode: string;
+}
 // 响应数据
-type FileType = 'doc' | 'excel' | 'execute' | 'md' | 'pdf' | 'ppt' | 'sound' | 'txt' | 'unknown' | 'zip'
+export type FileType = 'doc' | 'excel' | 'execute' | 'md' | 'pdf' | 'ppt' | 'sound' | 'txt' | 'unknown' | 'zip' | 'image'
 export interface fileData {
   id: number;
   isDirectory: boolean;
@@ -31,3 +36,4 @@ export interface fileData {
   sizeUnit: string; 
   type: FileType
 }
+

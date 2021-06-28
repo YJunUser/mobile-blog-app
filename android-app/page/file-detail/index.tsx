@@ -1,14 +1,14 @@
 import { useRoute } from '@react-navigation/native'
-import React, { useState } from 'react'
+import React from 'react'
 import { View, ScrollView, ActivityIndicator } from 'react-native'
-import { useQueryClient } from 'react-query'
-import { useRefresh } from '../../components/refresh'
 import { styles } from './style'
-import { useFileItem } from '../../utils/file-item'
 import { FileItem } from '../../components/FileItem'
 import { UsingModal } from '../../components/modal/usingModal'
 import { EditModal } from '../../components/modal/editModal'
-import { fileData, fileParams } from '../../types/file';
+import { fileParams } from '../../types/file';
+import { useCommonModal } from '../../utils/commonModal'
+import { Overlay } from 'react-native-elements'
+import { SharerModal } from '../../components/modal/sharer'
 
 
 
@@ -16,31 +16,11 @@ const FileScreen = ({ navigation }: { navigation: any }) => {
     const route = useRoute()
     const file: any = route.params['file']
 
-    const queryClient = useQueryClient()
-    const reloadData = () => {
-        return queryClient.invalidateQueries('fileData')
-    }
-    const { renderRefreshControl } = useRefresh({ loadData: reloadData })
-
     const fileParams: fileParams = {
         fileStatus: 'unRecycled',
         folderId: file.id
     }
-
-    const { data: fileDatas, isLoading } = useFileItem(fileParams)
-
-
-    const [select, setSelect] = useState<fileData[]>([])
-
-    const goFileScreen = (params: fileData) => {
-        if (params.isDirectory) {
-            navigation.push('FileScreen', {
-                file: params
-            })
-        } else {
-            //...
-        }
-    }
+    const { renderRefreshControl, isLoading, fileDatas, select, setSelect, setVisible, visible, toggleOverlay, goFileScreen } = useCommonModal(fileParams, navigation)
 
 
     return (
@@ -58,7 +38,11 @@ const FileScreen = ({ navigation }: { navigation: any }) => {
                 </View>
             }
             <UsingModal presentFolderId={file.id}></UsingModal>
-            <EditModal selectedFiles={select} isRecycle={false} setSelect={setSelect}></EditModal>
+            <EditModal selectedFiles={select} isRecycle={false} setSelect={setSelect} setSharerVisible={setVisible}></EditModal>
+            {/**分享的Overlay */}
+            <Overlay isVisible={visible} onBackdropPress={toggleOverlay} overlayStyle={{ padding: 30, width: '100%', height: '70%', position: 'absolute', bottom: 0 }}>
+                <SharerModal selectedFiles={select}></SharerModal>
+            </Overlay>
         </ScrollView >
     )
 }

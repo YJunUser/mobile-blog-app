@@ -51,3 +51,16 @@ export const useReloadFile = () => {
   }
   return reloadData
 }
+
+export function getDaysBetween(dateString1, dateString2) {
+  const startDate = Date.parse(dateString1);
+  const endDate = Date.parse(dateString2);
+  if (startDate > endDate) {
+      return 0;
+  }
+  if (startDate == endDate) {
+      return 1;
+  }
+  const days = (endDate - startDate) / (1 * 24 * 60 * 60 * 1000);
+  return days;
+}

@@ -1,47 +1,31 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ActivityIndicator, ScrollView, View } from 'react-native';
-import { useRefresh } from '../../components/refresh';
 import { styles } from './style';
 import { UsingModal } from '../../components/modal/usingModal';
-import { useFileItem } from '../../utils/file-item';
-import { fileData, fileParams } from '../../types/file';
+import { fileParams } from '../../types/file';
 import { FileItem } from '../../components/FileItem';
 import { EditModal } from '../../components/modal/editModal';
-import { useReloadFile } from '../../utils/index';
+import { useCommonModal } from '../../utils/commonModal';
+import { Overlay } from 'react-native-elements';
+import { SharerModal } from '../../components/modal/sharer';
 
 
 const HomeScreen = ({ navigation }: { navigation: any }) => {
 
-  const reloadData = useReloadFile()
-  const { renderRefreshControl } = useRefresh({ loadData: reloadData })
-
   const fileParams: fileParams = {
     fileStatus: 'unRecycled',
   }
-  const { data: fileDatas, isLoading } = useFileItem(fileParams)
 
-  const [select, setSelect] = useState<fileData[]>([])
-
-
-  const goFileScreen = (params: fileData) => {
-    if (params.isDirectory) {
-      navigation.push('FileScreen', {
-        file: params
-      })
-    } else {
-      //...
-    }
-  }
+  const { renderRefreshControl, isLoading, fileDatas, select, setSelect, setVisible, visible, toggleOverlay, goFileScreen } = useCommonModal(fileParams, navigation)
 
 
   return (
- 
+
     <ScrollView showsVerticalScrollIndicator={false}
       refreshControl={renderRefreshControl()}
       style={styles.container}
       contentContainerStyle={styles.content}
     >
-
       {
         isLoading ? <ActivityIndicator size="large" color="#00ff00" /> : <View style={styles.fileContainer}>
           {
@@ -49,10 +33,16 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
           }
         </View>
       }
+      {/**主要Modal, 包含上传文件 图片 拍照等功能 */}
       <UsingModal presentFolderId={0}></UsingModal>
-      <EditModal selectedFiles={select} isRecycle={false} setSelect={setSelect}></EditModal>
+      {/**EditModal 在编辑时打开,包含删除分享等功能 */}
+      <EditModal selectedFiles={select} isRecycle={false} setSelect={setSelect} setSharerVisible={setVisible}></EditModal>
+      {/**分享的Overlay */}
+      <Overlay isVisible={visible} onBackdropPress={toggleOverlay} overlayStyle={{ padding: 30, width: '100%', height: '70%', position: 'absolute', bottom: 0 }}>
+        <SharerModal selectedFiles={select}></SharerModal>
+      </Overlay>
     </ScrollView >
-  
+
   );
 };
 

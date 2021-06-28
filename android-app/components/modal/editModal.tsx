@@ -10,47 +10,51 @@ interface EditModalProps {
     selectedFiles: fileData[];
     setSelect: (selectedFiles: fileData[]) => void;
     isRecycle: boolean;
+    setSharerVisible?: (visible: boolean) => void;
 }
 
 export const EditModal = (editProps: EditModalProps) => {
-    const {selectedFiles, setSelect, isRecycle} = editProps
+    const { selectedFiles, setSelect, isRecycle, setSharerVisible } = editProps
     const { isEdit } = useAuth()
-    const editItemList = useEdit(selectedFiles, setSelect)
+    const editItemList = useEdit({ selectedFiles, setSelect, setSharerVisible })
     const recycleItemList = useRecycle(selectedFiles, setSelect)
     return (
-        <ModalComponent
-            hasBackdrop={false}
-            isVisible={isEdit}
-            ModalStyle={styles.editModal}
-            ModalContentStyle={styles.editContent}
-            coverScreen={false}
-            showClose={false}
-            showTitle={false}
-            contentChildren={
-                <View style={styles.editContent}>
-                    {
-                        isRecycle ?
-                            recycleItemList.map((item) => {
-                                return (
-                                    <View style={styles.editItem} key={item.name}>
-                                        <Icon name={item.icon} color={item.color} size={item.size || 18} onPress={item.handle}></Icon>
-                                        <Text style={{ fontSize: 12, marginTop: 5, color: item.color }}>{item.name}</Text>
-                                    </View>
-                                )
-                            }) :
-                            editItemList.map((item) => {
-                                return (
-                                    <View style={styles.editItem} key={item.name}>
-                                        <Icon name={item.icon} color={item.color} size={item.size || 18} onPress={item.handle}></Icon>
-                                        <Text style={{ fontSize: 12, marginTop: 5, color: item.color }}>{item.name}</Text>
-                                    </View>
-                                )
-                            })
-                    }
-                </View>
-            }>
+        <>
+            <ModalComponent
+                hasBackdrop={false}
+                isVisible={isEdit}
+                ModalStyle={styles.editModal}
+                ModalContentStyle={styles.editContent}
+                coverScreen={false}
+                showClose={false}
+                showTitle={false}
+                contentChildren={
+                    <View style={styles.editContent}>
+                        {
+                            isRecycle ?
+                                recycleItemList.map((item) => {
+                                    return (
+                                        <View style={styles.editItem} key={item.name}>
+                                            <Icon name={item.icon} color={item.color} size={item.size || 18} onPress={item.handle}></Icon>
+                                            <Text style={{ fontSize: 12, marginTop: 5, color: item.color }}>{item.name}</Text>
+                                        </View>
+                                    )
+                                }) :
+                                editItemList.map((item) => {
+                                    return (
+                                        <View style={styles.editItem} key={item.name}>
+                                            <Icon name={item.icon} color={item.color} size={item.size || 18} onPress={item.handle}></Icon>
+                                            <Text style={{ fontSize: 12, marginTop: 5, color: item.color }}>{item.name}</Text>
+                                        </View>
+                                    )
+                                })
+                        }
+                    </View>
+                }>
 
-        </ModalComponent>
+            </ModalComponent>
+        </>
+
     )
 }
 

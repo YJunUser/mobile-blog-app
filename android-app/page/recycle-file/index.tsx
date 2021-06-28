@@ -1,23 +1,20 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { ActivityIndicator, ScrollView, View, Text } from 'react-native'
-import { useRefresh } from '../../components/refresh'
-import { useReloadFile } from '../../utils/index'
+
 import { styles } from './style'
-import { fileData, fileParams } from '../../types/file';
-import { useFileItem } from '../../utils/file-item'
+import {  fileParams } from '../../types/file';
+
 import { FileItem } from '../../components/FileItem'
 import { EditModal } from '../../components/modal/editModal'
+import { useCommonModal } from '../../utils/commonModal'
 
-const RecycleFileScreen = () => {
-    const reloadData = useReloadFile()
-    const { renderRefreshControl } = useRefresh({ loadData: reloadData })
+const RecycleFileScreen = ({ navigation }: { navigation: any }) => {
 
     const fileParams: fileParams = {
         fileStatus: 'recycled',
     }
-    const { data: fileDatas, isLoading } = useFileItem(fileParams)
 
-    const [select, setSelect] = useState<fileData[]>([])
+    const { renderRefreshControl, isLoading, fileDatas, select, setSelect } = useCommonModal(fileParams, navigation)
 
 
     return (

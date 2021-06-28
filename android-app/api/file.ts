@@ -47,3 +47,11 @@ export const deleteFiles = (params: RecoveryFiles) => {
         }
     })
 }
+
+export const getUploadUrl = () => {
+    return http.request({
+        url: '/sharer-api/upload-url',
+        method: 'get',
+        
+    })
+}
