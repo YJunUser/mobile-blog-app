@@ -7,7 +7,7 @@ import { ListScreen } from './page/list';
 import { getEditHeader, getHeaderTitle, recycleHeaderLeft } from './utils/header';
 import { useAuth } from './context/auth-context';
 import { Suspense } from 'react';
-import {Text} from 'react-native'
+import { Text } from 'react-native'
 
 import ProfileScreen from './page/profile/index';
 import FullPageLoading from './components/FullPageActive/FullPageLoading';
@@ -16,6 +16,7 @@ import RecycleFileScreen from './page/recycle-file';
 import HomeScreen from './page/home';
 import LoginScreen from './page/unauth/login';
 import RegisterScreen from './page/unauth/register';
+import SharerScreen from './page/sharer';
 
 
 
@@ -100,8 +101,18 @@ export const AndroidApp = () => {
                   name='RecycleFileScreen'
                   component={RecycleFileScreen}
                   options={({ route }) => ({
-                    headerTitle: isEdit ? getEditHeader(setEdit) : () => <Text style={{marginLeft: 100, fontWeight: 'bold'}}>回收站</Text>,
+                    headerTitle: isEdit ? getEditHeader(setEdit) : () => <Text style={{ marginLeft: 100, fontWeight: 'bold' }}>回收站</Text>,
                     headerLeft: recycleHeaderLeft(isEdit),
+                    gestureDirection: 'horizontal', // 手势的方向
+                    gestureEnabled: true, // 启用安卓的手势返回
+                    cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS // 将ios翻页动画应用到安卓上
+                  })}
+                />
+                <Stack.Screen
+                  name='SharerScreen'
+                  component={SharerScreen}
+                  options={({ route }) => ({
+                    headerTitle: () => <Text style={{ marginLeft: 100, fontWeight: 'bold' }}>我的分享</Text>,
                     gestureDirection: 'horizontal', // 手势的方向
                     gestureEnabled: true, // 启用安卓的手势返回
                     cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS // 将ios翻页动画应用到安卓上

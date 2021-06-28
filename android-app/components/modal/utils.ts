@@ -4,7 +4,7 @@ import { useAuth } from '../../context/auth-context';
 import { fileData, FileType } from '../../types/file';
 import { useCamera, useImagePicker } from '../../utils/camera';
 import { useDeleteFiles, useRecoveryFiles, useRecycleFiles } from '../../utils/file-item';
-
+import * as RootNavigation from '../../RootNavigation'
 interface EditItem {
     icon: string;
     color: string;
@@ -193,6 +193,14 @@ export const useUsingModal = () => {
         }
 
     }
+
+    const goSharerScreen = () => {
+        setModalVisible(false)
+        setTimeout(() => {
+            RootNavigation.navigate('SharerScreen')
+        }, 500);
+    }
+
     // dataList of modal
     const list = [{
         icon: 'unknowfile1',
@@ -214,6 +222,11 @@ export const useUsingModal = () => {
         title: '拍照上传',
         color: '#00bfff',
         handle: getPictureByCamera
+    }, {
+        icon: 'sharealt',
+        title: '我的分享',
+        color: '#00ffff',
+        handle: goSharerScreen
     }]
     return {
         isEdit,

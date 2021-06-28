@@ -9,3 +9,10 @@ export interface SharerConfig {
     password?: string;
     shareType?: ShareType
 }
+
+export interface GetSharerParams {
+    current: number;
+    isAsc?: boolean;
+    size?: number;
+    sortBy?: string;
+}

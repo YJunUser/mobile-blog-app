@@ -1,8 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from "react-query"
-import { createShares } from "../api/sharer";
-import { SharerConfig } from "../types/sharer";
+import { createShares, getShares } from "../api/sharer";
+import { GetSharerParams, SharerConfig } from "../types/sharer";
 
 
+export const useShares = (params: GetSharerParams) => {
+    return useQuery(['sharers', params], async () => {
+        const res = await getShares(params)
+        return res.data.data
+    })
+}
 
 
 
