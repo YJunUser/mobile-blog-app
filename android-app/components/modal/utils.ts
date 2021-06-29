@@ -3,10 +3,11 @@ import { Alert, ToastAndroid } from 'react-native';
 import { useAuth } from '../../context/auth-context';
 import { fileData, FileType } from '../../types/file';
 import { useCamera, useImagePicker } from '../../utils/camera';
-import { useDeleteFiles, useRecoveryFiles, useRecycleFiles, useSaveFiles } from '../../utils/file-item';
+import { useDeleteFiles, useRecoveryFiles, useRecycleFiles, useRenameFiles, useSaveFiles } from '../../utils/file-item';
 import * as RootNavigation from '../../RootNavigation'
-import { getUploadUrl } from '../../api/file';
+import { getFileDownLoadUrl, getUploadUrl } from '../../api/file';
 import { uploadFiles } from '../../utils/uploadFiles';
+import Clipboard from '@react-native-community/clipboard';
 
 interface EditItem {
     icon: string;
@@ -23,7 +24,8 @@ interface EditModalProps {
 }
 export const useEdit = (props: EditModalProps) => {
     const { selectedFiles, setSelect, setSharerVisible } = props
-    const { mutateAsync } = useRecycleFiles()
+    const { mutateAsync, isLoading: recycleLoading } = useRecycleFiles()
+    const { mutateAsync: renameAsync, isLoading: renameLoading } = useRenameFiles()
     const confirmDelete = () => {
         Alert.alert('确认删除吗', '删除后可以在回收站中找到',
             [
@@ -57,8 +59,19 @@ export const useEdit = (props: EditModalProps) => {
         ToastAndroid.showWithGravity('收藏功能升级中,敬请期待', ToastAndroid.SHORT, ToastAndroid.TOP)
     }
 
-    const confirmDownload = () => {
-        ToastAndroid.showWithGravity('下载功能升级中,敬请期待', ToastAndroid.SHORT, ToastAndroid.TOP)
+    const confirmDownload = async () => {
+        if (selectedFiles.length > 1) {
+            ToastAndroid.showWithGravity('一次只能下载一个文件哦', ToastAndroid.SHORT, ToastAndroid.CENTER)
+        } else {
+            try {
+                const res = await getFileDownLoadUrl(selectedFiles[0].id)
+                const { url } = res.data.data
+                Clipboard.setString(url)
+                ToastAndroid.showWithGravity('下载链接已复制到粘贴板', ToastAndroid.SHORT, ToastAndroid.CENTER)
+            } catch (error) {
+                ToastAndroid.showWithGravity(error, ToastAndroid.SHORT, ToastAndroid.CENTER)
+            }
+        }
     }
 
     const confirmRename = () => {
@@ -66,7 +79,40 @@ export const useEdit = (props: EditModalProps) => {
         console.log(selectedFiles)
         if (selectedFiles.length > 1) {
             ToastAndroid.showWithGravity('一次只能重命名一个文件', ToastAndroid.SHORT, ToastAndroid.CENTER)
+        } else {
+            toggleFolder()
         }
+    }
+
+    // 重命名文件modal
+    const [isFolderVisible, setFolderVisible] = useState<boolean>(false)
+    const [folderName, setName] = useState<string>('')
+
+    const toggleFolder = () => {
+        setFolderVisible(!isFolderVisible)
+    }
+
+    const toggleFolderDone = async () => {
+        try {
+            const { isDirectory, id } = selectedFiles[0]
+
+            await renameAsync({
+                id,
+                renameParam: {
+                    isDirectory,
+                    newName: folderName
+                }
+            })
+            ToastAndroid.showWithGravity('重命名成功', ToastAndroid.LONG, ToastAndroid.CENTER)
+            setSelect([])
+        } catch (error) {
+            ToastAndroid.showWithGravity(error, ToastAndroid.LONG, ToastAndroid.CENTER)
+        }
+        toggleFolder()
+    }
+
+    const toggleFolderQuit = () => {
+        toggleFolder()
     }
 
     const editItemList: EditItem[] = [{
@@ -81,12 +127,12 @@ export const useEdit = (props: EditModalProps) => {
         handle: confirmCollect
     }, {
         icon: 'arrow-circle-o-down',
-        color: '#c0c0c0',
+        color: '#000000',
         name: '下载',
         handle: confirmDownload
     }, {
         icon: 'arrow-circle-o-right',
-        color: '#c0c0c0',
+        color: '#000000',
         name: '重命名',
         handle: confirmRename
     }, {
@@ -96,7 +142,7 @@ export const useEdit = (props: EditModalProps) => {
         handle: confirmDelete
     }]
 
-    return editItemList
+    return { editItemList, folderName, setName, toggleFolder, toggleFolderDone, toggleFolderQuit, isFolderVisible, renameLoading }
 }
 
 export const useRecycle = (selectedFiles: fileData[], setSelect: (selectFiles: fileData[]) => void) => {
@@ -165,6 +211,7 @@ export const useUsingModal = (presentFolderId: number) => {
     const [isModalVisible, setModalVisible] = useState<boolean>(false);
     const [isFileSelectorVisible, setFileSelectorVisible] = useState<boolean>(false)
     const [isFolderVisible, setFolderVisible] = useState<boolean>(false)
+
     const { isEdit, token } = useAuth()
 
 

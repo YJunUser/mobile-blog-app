@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { ModalComponent } from '.';
 import { useAuth } from '../../context/auth-context';
-import { StyleSheet, View, Text } from 'react-native'
+import { StyleSheet, View, Text, TextInput } from 'react-native'
 import { useEdit, useRecycle } from './utils';
 import { fileData } from '../../types/file';
+import EntypoIcon from 'react-native-vector-icons/Entypo';
 
 interface EditModalProps {
     selectedFiles: fileData[];
@@ -16,8 +17,10 @@ interface EditModalProps {
 export const EditModal = (editProps: EditModalProps) => {
     const { selectedFiles, setSelect, isRecycle, setSharerVisible } = editProps
     const { isEdit } = useAuth()
-    const editItemList = useEdit({ selectedFiles, setSelect, setSharerVisible })
+    const { editItemList, setName, folderName, toggleFolder, toggleFolderDone, toggleFolderQuit, isFolderVisible, renameLoading } = useEdit({ selectedFiles, setSelect, setSharerVisible })
     const recycleItemList = useRecycle(selectedFiles, setSelect)
+
+
     return (
         <>
             <ModalComponent
@@ -53,6 +56,22 @@ export const EditModal = (editProps: EditModalProps) => {
                 }>
 
             </ModalComponent>
+
+            <ModalComponent
+                title={'重命名'}
+                isVisible={isFolderVisible}
+                toggleModal={null}
+                ModalStyle={styles.folderModal}
+                rightTopChildren={<Text style={{ color: '#6a5acd', fontWeight: 'bold' }} onPress={renameLoading ? null : toggleFolderDone}>{renameLoading ? '请稍等' : '完成'}</Text>}
+                leftTopChildren={<Text style={{ color: '#000000' }} onPress={toggleFolderQuit}>取消</Text>}
+                contentChildren={
+                    <View style={styles.folderModalContent}>
+                        <EntypoIcon name='folder' size={150} color={'#6495ed'}></EntypoIcon>
+                        <TextInput style={styles.folderName} placeholder={'重命名'} focusable={true} value={folderName} onChangeText={setName}></TextInput>
+                    </View>
+                }
+            >
+            </ModalComponent>
         </>
 
     )
@@ -83,5 +102,19 @@ const styles = StyleSheet.create({
     editItem: {
         justifyContent: 'center',
         alignItems: 'center'
-    }
+    },
+    folderModal: {
+        position: 'absolute',
+        top: 10,
+        backgroundColor: 'white',
+        padding: 20,
+        width: '100%',
+        height: '100%'
+    },
+    folderModalContent: {
+        alignItems: 'center',
+        marginTop: 90,
+        width: '100%',
+    },
+    folderName: { height: 40, backgroundColor: '#dcdcdc', borderRadius: 9, width: '100%', textAlign: 'center', }
 })

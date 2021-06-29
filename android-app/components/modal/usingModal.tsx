@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { useNewFolder } from '../../utils/file-item';
 
 export const UsingModal = ({ presentFolderId }: { presentFolderId: number }) => {
-  const { isModalVisible, toggleFileSelector, toggleFolder, toggleModal, list, isFileSelectorVisible, isFolderVisible, isEdit,SelectFileDone } = useUsingModal(presentFolderId)
+  const { isModalVisible, toggleFileSelector, toggleFolder, toggleModal, list, isFileSelectorVisible, isFolderVisible, isEdit, SelectFileDone } = useUsingModal(presentFolderId)
   const [folderName, setName] = useState<string>('')
 
   const { mutateAsync, isLoading } = useNewFolder()
@@ -39,10 +39,10 @@ export const UsingModal = ({ presentFolderId }: { presentFolderId: number }) => 
       <ModalComponent
         title={'新建文件夹'}
         isVisible={isFolderVisible}
-        toggleModal={toggleFolder}
+        toggleModal={null}
         ModalStyle={styles.folderModal}
-        rightTopChildren={<TouchableNativeFeedback onPress={toggleFolderDone}><Text style={{ color: '#6a5acd', fontWeight: 'bold' }}>{isLoading ? '稍等...' : '完成'}</Text></TouchableNativeFeedback>}
-        leftTopChildren={<TouchableNativeFeedback onPress={toggleFolderQuit}><Text style={{ color: '#000000' }}>取消</Text></TouchableNativeFeedback>}
+        rightTopChildren={<Text style={{ color: '#6a5acd', fontWeight: 'bold' }} onPress={isLoading ? null : toggleFolderDone}>{isLoading ? '稍等...' : '完成'}</Text>}
+        leftTopChildren={<Text style={{ color: '#000000' }} onPress={toggleFolderQuit}>取消</Text>}
         contentChildren={
           <View style={styles.folderModalContent}>
             <EntypoIcon name='folder' size={150} color={'#6495ed'}></EntypoIcon>
@@ -51,6 +51,7 @@ export const UsingModal = ({ presentFolderId }: { presentFolderId: number }) => 
         }
       >
       </ModalComponent>
+
 
 
       <RNFileSelector title={"选择文件"} visible={isFileSelectorVisible} path={'/storage/emulated/0'} closeMenu={true} onDone={async (selectPath) => {

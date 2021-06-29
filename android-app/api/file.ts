@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios'
-import { fileData, fileParams, NewFolderParams, RecoveryFiles, RecycleFiles } from '../types/file'
+import { fileData, fileParams, NewFolderParams, RecoveryFiles, RecycleFiles, RenameConfig } from '../types/file'
 import http, { ResponseData } from './index'
 
 export const getFile = (params: fileParams): Promise<AxiosResponse<ResponseData<fileData[]>>> => {
@@ -69,8 +69,20 @@ export const saveFile = (uploadCode: string) => {
     })
 }
 
-export const getFileDownLoadUrl = () => {
+export const getFileDownLoadUrl = (fileId: number): Promise<AxiosResponse<ResponseData<{ url: string }>>> => {
     return http.request({
-        // url: `/sharer-api/download-url/${fileId}`
+        url: `/sharer-api/download-url/${fileId}`,
+        method: 'get'
+    })
+}
+
+export const renameFile = (renameParam: RenameConfig) => {
+    return http.request({
+        url: `/sharer-api/files/${renameParam.id}`,
+        method: 'put',
+        data: {
+            isDirectory: renameParam.renameParam.isDirectory,
+            newName: renameParam.renameParam.newName
+        }
     })
 }

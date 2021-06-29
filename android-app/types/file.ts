@@ -25,6 +25,14 @@ export interface UploadConfig {
   url: string;
   uploadCode: string;
 }
+
+export interface RenameConfig {
+  id: number;
+  renameParam: {
+    isDirectory: boolean;
+    newName: string;
+  }
+}
 // 响应数据
 export type FileType = 'doc' | 'excel' | 'execute' | 'md' | 'pdf' | 'ppt' | 'sound' | 'txt' | 'unknown' | 'zip' | 'image'
 export interface fileData {
