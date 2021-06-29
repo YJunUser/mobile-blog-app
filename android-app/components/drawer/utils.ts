@@ -15,7 +15,7 @@ export const useMenu = () => {
         }, 500);
 
     }
-    
+
     const list: MenuProps[] = [{
         title: '回收站',
         icon: 'delete',
@@ -25,12 +25,6 @@ export const useMenu = () => {
         handler: goRecycle,
     },
     {
-        title: '设置',
-        icon: 'setting',
-        iconType: 'ant-design',
-        iconColor: 'gray',
-        size: 20
-    }, {
         title: '退出',
         icon: 'logout',
         iconType: 'ant-design',

@@ -3,7 +3,7 @@ import { CardStyleInterpolators, createStackNavigator, } from '@react-navigation
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Drawer } from './components/drawer';
-import { ListScreen } from './page/list';
+import { AboutScreen } from './page/about';
 import { getEditHeader, getHeaderTitle, recycleHeaderLeft } from './utils/header';
 import { useAuth } from './context/auth-context';
 import { Suspense } from 'react';
@@ -34,9 +34,9 @@ const BottomTab = () => {
         tabBarIcon: ({ focused, color, size }: { focused: boolean, color: string, size: number }) => {
           let iconName: string;
           if (route.name === 'HomeScreen') {
-            iconName = focused ? 'file-text' : 'file-text';
-          } else if (route.name === 'ListScreen') {
-            iconName = focused ? 'search' : 'search';
+            iconName = focused ? 'twitter' : 'twitter';
+          } else if (route.name === 'AboutScreen') {
+            iconName = focused ? 'vcard-o' : 'vcard-o';
           }
           // You can return any component that you like here!
           return <Icon name={iconName || ''} size={size} color={color} />;
@@ -46,8 +46,8 @@ const BottomTab = () => {
         activeTintColor: '#6495ed',
         inactiveTintColor: 'gray',
       }}>
-      <Tab.Screen name="HomeScreen" component={HomeScreen} options={{ tabBarVisible: !isEdit }} />
-      <Tab.Screen name="ListScreen" component={ListScreen} />
+      <Tab.Screen name="HomeScreen" component={HomeScreen} options={{ tabBarVisible: !isEdit, tabBarLabel: '文件'}} />
+      <Tab.Screen name="AboutScreen" component={AboutScreen} options={{ tabBarLabel: '关于'}}/>
     </Tab.Navigator>
   );
 };

@@ -21,6 +21,10 @@ export function getHeaderTitle(route: Partial<Route<string, object>>): () => JSX
       return () => {
         return (<Text style={styles.headerTitle}>编辑个人资料</Text>)
       }
+    case 'AboutScreen' :
+      return () => {
+        return (<Text style={{textAlign: 'center', fontSize: 16}}>关于我们</Text>)
+      }
   }
 }
 

@@ -6,6 +6,7 @@ import { View, Pressable } from "react-native"
 import { Text, Input, Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { useAuth } from "../../context/auth-context";
+import { goWeb } from "../../utils/goWeb";
 import { styles } from "./styles";
 
 const LoginScreen = () => {
@@ -42,7 +43,7 @@ const LoginScreen = () => {
     try {
       await login(values);
     } catch (error) {
-     setError(error)
+      setError(error)
     }
     setLoading(false)
     setError(null)
@@ -60,7 +61,7 @@ const LoginScreen = () => {
     />
     <Input
       placeholder='请输入密码'
-      leftIcon={{ type: 'ant-design', name: 'lock', size: 20  }}
+      leftIcon={{ type: 'ant-design', name: 'lock', size: 20 }}
       clearButtonMode="while-editing"
       secureTextEntry={true}
       onChangeText={onChangePassword}
@@ -68,7 +69,7 @@ const LoginScreen = () => {
       errorMessage={error ? error : ''}
     />
     <View style={styles.buttonGroup}>
-      <Pressable onPress={() => { navigation.navigate('RegisterScreen') }}>
+      <Pressable onPress={() => { goWeb() }}>
         <Text>关于我们</Text>
       </Pressable>
       <Pressable onPress={() => { navigation.navigate('RegisterScreen') }}>

@@ -218,13 +218,7 @@ const SharerScreen = () => {
                 onEndReached={() => {
                     loadMore()
                 }}>
-
-
-
-
-
             </FlatList>
-
         </>
     )
 

@@ -5,6 +5,7 @@ import { apiBaseUrl } from '../../api';
 import { baseStyles } from '../../assets/styles';
 import { useAuth } from '../../context/auth-context';
 import * as RootNavigation from '../../RootNavigation'
+import { goWeb } from '../../utils/goWeb';
 import { styles } from './styles';
 import { useMenu } from './utils';
 
@@ -39,8 +40,8 @@ export const Menu = (): JSX.Element => {
         }
         <TouchableOpacity style={styles.button}>
           <View style={[baseStyles.row]}>
-            <Text style={styles.scan}>桌面端</Text>
-            <Icon name='ios-scan' type='ionicon' size={14} color={'white'}></Icon>
+            <Text style={styles.scan} onPress={goWeb}>桌面端</Text>
+            {/* <Icon name='ios-scan' type='ionicon' size={14} color={'white'}></Icon> */}
           </View>
         </TouchableOpacity>
       </View>
