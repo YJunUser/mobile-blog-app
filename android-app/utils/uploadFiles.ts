@@ -4,10 +4,11 @@ interface UploadConfig {
     url: string;
     filePath: string;
     token: string;
+    method: 'POST' | 'PUT'
 }
 
 export const uploadFiles = async (config: UploadConfig) => {
-    const { url, filePath, token } = config
+    const { url, filePath, token, method } = config
 
     const path = filePath.replace("file://", "");
     const arr = path.split('/')
@@ -21,7 +22,7 @@ export const uploadFiles = async (config: UploadConfig) => {
     });
 
     const response = await RNFetchBlob.fetch(
-        "POST",
+        method,
         url,
         {
             Accept: "application/json",
@@ -30,6 +31,7 @@ export const uploadFiles = async (config: UploadConfig) => {
         },
         formData
     );
+    console.log(response)
 
-    return JSON.parse(response.data)
+    return response.data
 }

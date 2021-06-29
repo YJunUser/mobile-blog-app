@@ -3,8 +3,11 @@ import { Alert, ToastAndroid } from 'react-native';
 import { useAuth } from '../../context/auth-context';
 import { fileData, FileType } from '../../types/file';
 import { useCamera, useImagePicker } from '../../utils/camera';
-import { useDeleteFiles, useRecoveryFiles, useRecycleFiles } from '../../utils/file-item';
+import { useDeleteFiles, useRecoveryFiles, useRecycleFiles, useSaveFiles } from '../../utils/file-item';
 import * as RootNavigation from '../../RootNavigation'
+import { getUploadUrl } from '../../api/file';
+import { uploadFiles } from '../../utils/uploadFiles';
+
 interface EditItem {
     icon: string;
     color: string;
@@ -158,13 +161,14 @@ export const useRecycle = (selectedFiles: fileData[], setSelect: (selectFiles: f
     return editItemList
 }
 
-export const useUsingModal = () => {
+export const useUsingModal = (presentFolderId: number) => {
     const [isModalVisible, setModalVisible] = useState<boolean>(false);
     const [isFileSelectorVisible, setFileSelectorVisible] = useState<boolean>(false)
     const [isFolderVisible, setFolderVisible] = useState<boolean>(false)
-    const { isEdit } = useAuth()
+    const { isEdit, token } = useAuth()
 
 
+    const { mutateAsync: saveFileAsync } = useSaveFiles()
 
     const openImagePicker = useImagePicker()
     const openCamera = useCamera()
@@ -181,15 +185,53 @@ export const useUsingModal = () => {
     }
 
     const getPictureByCamera = async () => {
-        const result = await openCamera()
-        console.log(result)
+        try {
+            const result = await openCamera()
+
+            const path = result.path
+            const arr = path.split('/')
+            const name = arr[arr.length - 1]
+
+            const res = await getUploadUrl({ filename: name, folderId: presentFolderId })
+            const { url, uploadCode } = res.data.data
+
+            await uploadFiles({
+                filePath: result.path,
+                url: url,
+                token,
+                method: 'PUT'
+            })
+
+            await saveFileAsync(uploadCode)
+            ToastAndroid.showWithGravity('上传成功', ToastAndroid.SHORT, ToastAndroid.CENTER)
+
+        } catch (error) {
+            ToastAndroid.showWithGravity(error, ToastAndroid.SHORT, ToastAndroid.CENTER)
+        }
     }
     const getPictureByPicker = async () => {
         try {
             const result = await openImagePicker()
-            console.log(result)
+
+            const path = result.path
+            const arr = path.split('/')
+            const name = arr[arr.length - 1]
+
+            const res = await getUploadUrl({ filename: name, folderId: presentFolderId })
+            const { url, uploadCode } = res.data.data
+
+            await uploadFiles({
+                filePath: result.path,
+                url: url,
+                token,
+                method: 'PUT'
+            })
+
+            await saveFileAsync(uploadCode)
+            ToastAndroid.showWithGravity('上传成功', ToastAndroid.SHORT, ToastAndroid.CENTER)
+
         } catch (error) {
-            console.log(error)
+            ToastAndroid.showWithGravity(error, ToastAndroid.SHORT, ToastAndroid.CENTER)
         }
 
     }
@@ -199,6 +241,33 @@ export const useUsingModal = () => {
         setTimeout(() => {
             RootNavigation.navigate('SharerScreen')
         }, 500);
+    }
+
+    const SelectFileDone = async (selectPath: string) => {
+        try {
+
+            const truePath = 'file://' + selectPath
+            const path = truePath
+            const arr = path.split('/')
+            const name = arr[arr.length - 1]
+            console.log(name)
+
+            const res = await getUploadUrl({ filename: name, folderId: presentFolderId })
+            const { url, uploadCode } = res.data.data
+
+            await uploadFiles({
+                filePath: truePath,
+                url: url,
+                token,
+                method: 'PUT'
+            })
+            setFileSelectorVisible(false)
+            await saveFileAsync(uploadCode)
+            ToastAndroid.showWithGravity('上传成功', ToastAndroid.SHORT, ToastAndroid.CENTER)
+
+        } catch (error) {
+            ToastAndroid.showWithGravity(error, ToastAndroid.SHORT, ToastAndroid.CENTER)
+        }
     }
 
     // dataList of modal
@@ -241,7 +310,8 @@ export const useUsingModal = () => {
         toggleFolder,
         toggleModal,
         getPictureByCamera,
-        getPictureByPicker
+        getPictureByPicker,
+        SelectFileDone
     }
 }
 

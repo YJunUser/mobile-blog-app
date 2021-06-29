@@ -21,9 +21,11 @@ const ProfileScreen = () => {
       uploadFiles({
         filePath: result.path,
         url: 'http://sharer.violetfreesia.com:666/sharer-api/upload/avatar',
-        token
+        token,
+        method: 'POST'
       }).then(res => {
-        const avatarUrl = res.data.avatar
+        const result = JSON.parse(res)
+        const avatarUrl = result.data.avatar
         setUser({ ...user, avatar: avatarUrl })
       }).catch(err => {
         console.log(err)

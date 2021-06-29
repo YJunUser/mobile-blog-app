@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "react-query"
-import { deleteFiles, getFile, newFolder, recoveryFiles, recycleFiles } from "../api/file"
+import { deleteFiles, getFile, newFolder, recoveryFiles, recycleFiles, saveFile } from "../api/file"
 import { fileParams, NewFolderParams, RecoveryFiles, RecycleFiles } from "../types/file"
 
 
@@ -51,6 +51,18 @@ export const useDeleteFiles = () => {
     return useMutation(
         async (params: RecoveryFiles) => {
             await deleteFiles(params);
+        },
+        {
+            onSuccess: () => queryClient.invalidateQueries('fileData')
+        }
+    )
+}
+
+export const useSaveFiles = () => {
+    const queryClient = useQueryClient()
+    return useMutation(
+        async (uploadCode: string) => {
+            await saveFile(uploadCode);
         },
         {
             onSuccess: () => queryClient.invalidateQueries('fileData')

@@ -16,7 +16,7 @@ interface FileItemProps {
 }
 
 export const FileItem = (props: FileItemProps) => {
-    const { file, setSelect, select, goFileScreen, isRecycle=false } = props
+    const { file, setSelect, select, goFileScreen, isRecycle = false } = props
     const [isCheck, setCheck] = useState<boolean>(false)
     const { isEdit, setEdit } = useAuth()
 
@@ -35,10 +35,10 @@ export const FileItem = (props: FileItemProps) => {
         }
     }
     const itemPress = () => {
-        if(isRecycle) {
-            return  isEdit ? switchCheck(file) : null
+        if (isRecycle) {
+            return isEdit ? switchCheck(file) : null
         } else {
-            return  isEdit ? switchCheck(file) : goFileScreen(file)
+            return isEdit ? switchCheck(file) : goFileScreen(file)
         }
     }
 
@@ -51,7 +51,7 @@ export const FileItem = (props: FileItemProps) => {
                 }}
                 style={styles.fileItem} >
                 <GetIcon type={file.type}></GetIcon>
-                <Text>{file.name}</Text>
+                <Text style={styles.itemName} numberOfLines={1}>{file.name}</Text>
             </TouchableScale>
             {
                 isEdit ? <Icon
@@ -72,5 +72,10 @@ const styles = StyleSheet.create({
     },
     fileItem: {
         padding: 0, margin: 0, justifyContent: 'center', alignItems: 'center', marginTop: 10
+    },
+    itemName: {
+        width: 90,
+        textAlign: 'center'
     }
+
 })

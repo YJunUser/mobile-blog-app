@@ -48,10 +48,29 @@ export const deleteFiles = (params: RecoveryFiles) => {
     })
 }
 
-export const getUploadUrl = () => {
+
+interface UrlConfig {
+    uploadCode: string;
+    url: string;
+}
+export const getUploadUrl = (params: { filename: string; folderId: number }): Promise<AxiosResponse<ResponseData<UrlConfig>>> => {
     return http.request({
         url: '/sharer-api/upload-url',
         method: 'get',
-        
+        params: params
+    })
+}
+
+
+export const saveFile = (uploadCode: string) => {
+    return http.request({
+        url: `/sharer-api/saveFile/${uploadCode}`,
+        method: 'post'
+    })
+}
+
+export const getFileDownLoadUrl = () => {
+    return http.request({
+        // url: `/sharer-api/download-url/${fileId}`
     })
 }

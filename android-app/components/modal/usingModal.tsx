@@ -9,9 +9,11 @@ import { useState } from 'react';
 import { useNewFolder } from '../../utils/file-item';
 
 export const UsingModal = ({ presentFolderId }: { presentFolderId: number }) => {
-  const { isModalVisible, toggleFileSelector, toggleFolder, toggleModal, list, isFileSelectorVisible, isFolderVisible, isEdit } = useUsingModal()
+  const { isModalVisible, toggleFileSelector, toggleFolder, toggleModal, list, isFileSelectorVisible, isFolderVisible, isEdit,SelectFileDone } = useUsingModal(presentFolderId)
   const [folderName, setName] = useState<string>('')
+
   const { mutateAsync, isLoading } = useNewFolder()
+
 
   const toggleFolderDone = async () => {
     try {
@@ -51,8 +53,8 @@ export const UsingModal = ({ presentFolderId }: { presentFolderId: number }) => 
       </ModalComponent>
 
 
-      <RNFileSelector title={"选择文件"} visible={isFileSelectorVisible} path={'/storage/emulated/0'} closeMenu={true} onDone={(path) => {
-        console.log("file selected: " + path);
+      <RNFileSelector title={"选择文件"} visible={isFileSelectorVisible} path={'/storage/emulated/0'} closeMenu={true} onDone={async (selectPath) => {
+        SelectFileDone(selectPath)
       }} onCancel={toggleFileSelector} />
 
       {
