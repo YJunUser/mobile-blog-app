@@ -124,9 +124,6 @@ export const SharerModal = ({ selectedFiles }: { selectedFiles: fileData[]; }) =
             </View>
 
 
-
-
-
         </View>
     )
 }

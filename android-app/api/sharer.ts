@@ -38,3 +38,10 @@ export const getShares = (params: GetSharerParams): Promise<AxiosResponse<Respon
         params: params
     })
 }
+
+export const deleteShares = (shareId: number) => {
+    return http.request({
+        url: `/sharer-api/shares/${shareId}`,
+        method: 'delete'
+    })
+}

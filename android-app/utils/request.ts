@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import * as RootNavigation from '../RootNavigation'
 import axios, {
   AxiosInstance,
   AxiosRequestConfig,
@@ -60,8 +60,7 @@ class HttpRequest {
           // Unauthorized
           if (error.response.status === 401) {
             await auth.removeToken()
-            const navigation = useNavigation()
-            navigation.navigate('LoginScreen')
+            RootNavigation.navigate('LoginScreen')
           }
           return Promise.reject(error.response.data.errorMessage.userPromptMsg)
         } else {

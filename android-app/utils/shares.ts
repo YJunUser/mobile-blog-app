@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "react-query"
-import { createShares, getShares } from "../api/sharer";
+import { createShares, deleteShares, getShares } from "../api/sharer";
 import { GetSharerParams, SharerConfig } from "../types/sharer";
 
 
@@ -25,3 +25,17 @@ export const useCreateShares = () => {
         }
     )
 }
+
+export const useDeleteShares = () => {
+    const queryClient = useQueryClient()
+    return useMutation(
+        async (shareId: number) => {
+            const res = await deleteShares(shareId);
+            return res.data.data
+        },
+        {
+            onSuccess: () => queryClient.invalidateQueries('sharers')
+        }
+    )
+}
+
