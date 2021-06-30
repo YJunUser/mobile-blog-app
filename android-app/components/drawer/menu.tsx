@@ -40,7 +40,7 @@ export const Menu = (): JSX.Element => {
         }
         <TouchableOpacity style={styles.button}>
           <View style={[baseStyles.row]}>
-            <Text style={styles.scan} onPress={goWeb}>桌面端</Text>
+            <Text style={styles.scan} onPress={() => goWeb('http://sharer.violetfreesia.com:666/')}>桌面端</Text>
             {/* <Icon name='ios-scan' type='ionicon' size={14} color={'white'}></Icon> */}
           </View>
         </TouchableOpacity>

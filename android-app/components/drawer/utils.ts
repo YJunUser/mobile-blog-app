@@ -16,6 +16,15 @@ export const useMenu = () => {
 
     }
 
+    const goAbout = () => {
+        // close drawer first
+        setOpen(!isOpen)
+        // delay time and user can see it
+        setTimeout(() => {
+            RootNavigation.navigate('AboutScreen')
+        }, 500);
+    }
+
     const list: MenuProps[] = [{
         title: '回收站',
         icon: 'delete',
@@ -23,6 +32,14 @@ export const useMenu = () => {
         iconColor: 'yellow',
         size: 20,
         handler: goRecycle,
+    },
+    {
+        title: '关于我们',
+        icon: 'smileo',
+        iconType: 'ant-design',
+        iconColor: '#ff6347',
+        size: 20,
+        handler: goAbout,
     },
     {
         title: '退出',

@@ -4,20 +4,22 @@ interface UploadConfig {
     url: string;
     filePath: string;
     token: string;
-    method: 'POST' | 'PUT'
+    method: 'POST' | 'PUT',
+    name?: string;
 }
 
 export const uploadFiles = async (config: UploadConfig) => {
-    const { url, filePath, token, method } = config
+    const { url, filePath, token, method, name } = config
 
+    console.log(name)
     const path = filePath.replace("file://", "");
     const arr = path.split('/')
-    const name = arr[arr.length - 1]
+    const selfName = arr[arr.length - 1]
     const formData = []
 
     formData.push({
         name: "file",
-        filename: name,
+        filename: name || selfName,
         data: RNFetchBlob.wrap(path)
     });
 

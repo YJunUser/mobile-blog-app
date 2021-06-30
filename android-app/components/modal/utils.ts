@@ -2,13 +2,14 @@ import { useState } from 'react';
 import { Alert, ToastAndroid } from 'react-native';
 import { useAuth } from '../../context/auth-context';
 import { fileData, FileType } from '../../types/file';
-import { useCamera, useImagePicker } from '../../utils/camera';
-import { useDeleteFiles, useRecoveryFiles, useRecycleFiles, useRenameFiles, useSaveFiles } from '../../utils/file-item';
+import { useCamera } from '../../utils/camera';
+import { useDeleteFiles, useRecoveryFiles, useRecycleFiles, useRenameFiles, useSaveArticle, useSaveFiles } from '../../utils/file-item';
 import * as RootNavigation from '../../RootNavigation'
 import { getFileDownLoadUrl, getUploadUrl } from '../../api/file';
-import { uploadFiles } from '../../utils/uploadFiles';
-import Clipboard from '@react-native-community/clipboard';
-
+import DocumentPicker from 'react-native-document-picker';
+import RNFetchBlob from 'rn-fetch-blob';
+import RNFS from 'react-native-fs'
+import { goWeb } from '../../utils/goWeb';
 interface EditItem {
     icon: string;
     color: string;
@@ -26,6 +27,7 @@ export const useEdit = (props: EditModalProps) => {
     const { selectedFiles, setSelect, setSharerVisible } = props
     const { mutateAsync, isLoading: recycleLoading } = useRecycleFiles()
     const { mutateAsync: renameAsync, isLoading: renameLoading } = useRenameFiles()
+    const { setEdit } = useAuth()
     const confirmDelete = () => {
         Alert.alert('确认删除吗', '删除后可以在回收站中找到',
             [
@@ -46,6 +48,7 @@ export const useEdit = (props: EditModalProps) => {
                 },
             ]
         );
+        setEdit(false)
     }
     const confirmSharer = () => {
         if (selectedFiles.length > 1) {
@@ -53,6 +56,7 @@ export const useEdit = (props: EditModalProps) => {
         } else {
             setSharerVisible(true)
         }
+        setEdit(false)
     }
 
     const confirmCollect = () => {
@@ -66,12 +70,14 @@ export const useEdit = (props: EditModalProps) => {
             try {
                 const res = await getFileDownLoadUrl(selectedFiles[0].id)
                 const { url } = res.data.data
-                Clipboard.setString(url)
-                ToastAndroid.showWithGravity('下载链接已复制到粘贴板', ToastAndroid.SHORT, ToastAndroid.CENTER)
+                goWeb(url)
+                // Clipboard.setString(url)
+                // ToastAndroid.showWithGravity('下载链接已复制到粘贴板', ToastAndroid.SHORT, ToastAndroid.CENTER)
             } catch (error) {
                 ToastAndroid.showWithGravity(error, ToastAndroid.SHORT, ToastAndroid.CENTER)
             }
         }
+        setEdit(false)
     }
 
     const confirmRename = () => {
@@ -82,6 +88,7 @@ export const useEdit = (props: EditModalProps) => {
         } else {
             toggleFolder()
         }
+        setEdit(false)
     }
 
     // 重命名文件modal
@@ -105,6 +112,7 @@ export const useEdit = (props: EditModalProps) => {
             })
             ToastAndroid.showWithGravity('重命名成功', ToastAndroid.LONG, ToastAndroid.CENTER)
             setSelect([])
+            setEdit(false)
         } catch (error) {
             ToastAndroid.showWithGravity(error, ToastAndroid.LONG, ToastAndroid.CENTER)
         }
@@ -211,20 +219,43 @@ export const useUsingModal = (presentFolderId: number) => {
     const [isModalVisible, setModalVisible] = useState<boolean>(false);
     const [isFileSelectorVisible, setFileSelectorVisible] = useState<boolean>(false)
     const [isFolderVisible, setFolderVisible] = useState<boolean>(false)
+    const [uploadLoading, setUploadLoading] = useState<boolean>(false)
+    const [saveVisible, setSaveVisible] = useState<boolean>(false)
+    const [url, setUrl] = useState<string>('')
+
+    const { mutateAsync: saveArticle, isLoading: saveArticleLoading } = useSaveArticle()
 
     const { isEdit, token } = useAuth()
 
 
     const { mutateAsync: saveFileAsync } = useSaveFiles()
 
-    const openImagePicker = useImagePicker()
     const openCamera = useCamera()
 
     const toggleModal = () => {
         setModalVisible(!isModalVisible);
     };
-    const toggleFileSelector = () => {
-        setFileSelectorVisible(!isFileSelectorVisible)
+    const toggleFileSelector = async () => {
+        try {
+            const res = await DocumentPicker.pick({
+                type: [DocumentPicker.types.allFiles],
+            });
+            RNFS.readFile(res.uri, 'base64').then(data => {
+                if (data) {
+                    SelectFileDone(res.uri, res.name, data)
+                }
+
+            }).catch(err => {
+                console.log(err)
+            })
+
+        } catch (err) {
+            if (DocumentPicker.isCancel(err)) {
+                ToastAndroid.showWithGravity(err, ToastAndroid.SHORT, ToastAndroid.CENTER)
+            } else {
+                throw err;
+            }
+        }
     }
     const toggleFolder = () => {
         setModalVisible(false)
@@ -234,23 +265,14 @@ export const useUsingModal = (presentFolderId: number) => {
     const getPictureByCamera = async () => {
         try {
             const result = await openCamera()
-
             const path = result.path
             const arr = path.split('/')
             const name = arr[arr.length - 1]
 
-            const res = await getUploadUrl({ filename: name, folderId: presentFolderId })
-            const { url, uploadCode } = res.data.data
-
-            await uploadFiles({
-                filePath: result.path,
-                url: url,
-                token,
-                method: 'PUT'
+            RNFS.readFile(path, 'base64').then(data => {
+                console.log(data)
+                SelectFileDone(path, name, data)
             })
-
-            await saveFileAsync(uploadCode)
-            ToastAndroid.showWithGravity('上传成功', ToastAndroid.SHORT, ToastAndroid.CENTER)
 
         } catch (error) {
             ToastAndroid.showWithGravity(error, ToastAndroid.SHORT, ToastAndroid.CENTER)
@@ -258,58 +280,50 @@ export const useUsingModal = (presentFolderId: number) => {
     }
     const getPictureByPicker = async () => {
         try {
-            const result = await openImagePicker()
 
-            const path = result.path
-            const arr = path.split('/')
-            const name = arr[arr.length - 1]
-
-            const res = await getUploadUrl({ filename: name, folderId: presentFolderId })
-            const { url, uploadCode } = res.data.data
-
-            await uploadFiles({
-                filePath: result.path,
-                url: url,
-                token,
-                method: 'PUT'
+            const res = await DocumentPicker.pick({
+                type: [DocumentPicker.types.images],
+            });
+            RNFS.readFile(res.uri, 'base64').then(data => {
+                console.log(data)
+                SelectFileDone(res.uri, res.name, data)
             })
-
-            await saveFileAsync(uploadCode)
-            ToastAndroid.showWithGravity('上传成功', ToastAndroid.SHORT, ToastAndroid.CENTER)
-
-        } catch (error) {
-            ToastAndroid.showWithGravity(error, ToastAndroid.SHORT, ToastAndroid.CENTER)
+        } catch (err) {
+            if (DocumentPicker.isCancel(err)) {
+                ToastAndroid.showWithGravity(err, ToastAndroid.SHORT, ToastAndroid.CENTER)
+            } else {
+                throw err;
+            }
         }
 
     }
 
-    const goSharerScreen = () => {
-        setModalVisible(false)
-        setTimeout(() => {
-            RootNavigation.navigate('SharerScreen')
-        }, 500);
-    }
 
-    const SelectFileDone = async (selectPath: string) => {
+    const SelectFileDone = async (selectPath: string, fileName: string, data: string) => {
         try {
-
-            const truePath = 'file://' + selectPath
-            const path = truePath
-            const arr = path.split('/')
-            const name = arr[arr.length - 1]
-            console.log(name)
-
-            const res = await getUploadUrl({ filename: name, folderId: presentFolderId })
+            setUploadLoading(true)
+            const res = await getUploadUrl({ filename: fileName, folderId: presentFolderId })
             const { url, uploadCode } = res.data.data
 
-            await uploadFiles({
-                filePath: truePath,
-                url: url,
-                token,
-                method: 'PUT'
-            })
-            setFileSelectorVisible(false)
+            RNFetchBlob.fetch('PUT', url, {
+                Authorization: token,
+                'Dropbox-API-Arg': JSON.stringify({
+                    path: selectPath,
+                    mode: 'add',
+                    autorename: true,
+                    mute: false
+                }),
+                'Content-Type': 'application/octet-stream',
+            }, data)
+                .then((res) => {
+                    console.log(res.text())
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+
             await saveFileAsync(uploadCode)
+            setUploadLoading(false)
             ToastAndroid.showWithGravity('上传成功', ToastAndroid.SHORT, ToastAndroid.CENTER)
 
         } catch (error) {
@@ -317,6 +331,24 @@ export const useUsingModal = (presentFolderId: number) => {
         }
     }
 
+    const toggleSaveArticle = () => {
+        setSaveVisible(true)
+    }
+
+    const confirmSaveArticle = async () => {
+        try {
+            if (url.length > 0) {
+                await saveArticle({ url })
+                ToastAndroid.showWithGravity('上传成功', ToastAndroid.SHORT, ToastAndroid.CENTER)
+            } else {
+                ToastAndroid.showWithGravity('url不能为空', ToastAndroid.SHORT, ToastAndroid.CENTER)
+            }
+            setSaveVisible(false)
+        } catch (error) {
+            ToastAndroid.showWithGravity(error, ToastAndroid.SHORT, ToastAndroid.CENTER)
+            setSaveVisible(false)
+        }
+    }
     // dataList of modal
     const list = [{
         icon: 'unknowfile1',
@@ -331,7 +363,7 @@ export const useUsingModal = (presentFolderId: number) => {
     }, {
         icon: 'picture',
         title: '本地图片',
-        color: '#e9967a',
+        color: 'green',
         handle: getPictureByPicker
     }, {
         icon: 'camerao',
@@ -339,10 +371,10 @@ export const useUsingModal = (presentFolderId: number) => {
         color: '#00bfff',
         handle: getPictureByCamera
     }, {
-        icon: 'sharealt',
-        title: '我的分享',
-        color: '#00ffff',
-        handle: goSharerScreen
+        icon: 'download',
+        title: '保存文章',
+        color: '#000000',
+        handle: toggleSaveArticle
     }]
     return {
         isEdit,
@@ -358,7 +390,14 @@ export const useUsingModal = (presentFolderId: number) => {
         toggleModal,
         getPictureByCamera,
         getPictureByPicker,
-        SelectFileDone
+        SelectFileDone,
+        uploadLoading,
+        saveVisible,
+        setSaveVisible,
+        url,
+        setUrl,
+        confirmSaveArticle,
+        saveArticleLoading
     }
 }
 
@@ -384,6 +423,8 @@ export function getSharerType(type: FileType): 'article' | 'file' | 'folder' {
         case 'execute':
             return 'file'
         case 'ppt':
+            return 'file'
+        case 'image':
             return 'file'
         default:
             return 'folder'

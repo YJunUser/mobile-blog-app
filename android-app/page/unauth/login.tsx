@@ -50,8 +50,8 @@ const LoginScreen = () => {
   }
 
   return <View style={styles.container}>
-    <Text h3 style={{ marginTop: 50 }}>ConfigureSystem</Text>
-    <Text style={styles.brief}>管理你的所有事</Text>
+    <Text h3 style={{ marginTop: 100 }}>Sharer</Text>
+    {/* <Text style={styles.brief}>管理你的所有事</Text> */}
     <Input
       placeholder='用户名/邮箱'
       leftIcon={{ type: 'ant-design', name: 'mail', size: 20 }}
@@ -69,7 +69,7 @@ const LoginScreen = () => {
       errorMessage={error ? error : ''}
     />
     <View style={styles.buttonGroup}>
-      <Pressable onPress={() => { goWeb() }}>
+      <Pressable onPress={() => { goWeb('http://sharer.violetfreesia.com:666/') }}>
         <Text>关于我们</Text>
       </Pressable>
       <Pressable onPress={() => { navigation.navigate('RegisterScreen') }}>

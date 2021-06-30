@@ -50,7 +50,8 @@ const SharerScreen = () => {
     const { mutateAsync, isLoading: deleteLoading } = useDeleteShares()
     const [records, setRecords] = useState<sharesItem[]>(null)
     const [isVisible, setVisible] = useState<boolean>(false)
-    const [isCopyLoaing, setCopyLoading] = useState<boolean>(false)
+    const [isCopyLoading, setCopyLoading] = useState<boolean>(false)
+    const [item, setItem] = useState(null)
 
     const toggleOverlay = () => {
         setVisible(!isVisible);
@@ -126,7 +127,7 @@ const SharerScreen = () => {
                             title="详细信息"
                             icon={{ name: 'info', color: 'white' }}
                             buttonStyle={{ minHeight: '100%' }}
-                            onPress={() => setVisible(true)}
+                            onPress={() => { setVisible(true); setItem(item) }}
                         />
 
                     }
@@ -146,48 +147,6 @@ const SharerScreen = () => {
                     </ListItem.Content>
                     <ListItem.Chevron onPress={() => toggleOverlay()} />
                 </ListItem.Swipeable>
-                {/**overlay 显示具体信息 */}
-                <Overlay isVisible={isVisible} overlayStyle={{ padding: 30, width: '100%', height: '70%', position: 'absolute', bottom: 0 }} onBackdropPress={toggleOverlay}>
-                    <View style={{ width: '100%' }}>
-
-                        <Card.Title><Text style={{ fontSize: 20 }}>{item.filename}</Text></Card.Title>
-                        <ListItem >
-                            <ListItem.Content>
-                                <ListItem.Title>到期时间</ListItem.Title>
-                                <ListItem.Subtitle>{item.expiredAt}</ListItem.Subtitle>
-                            </ListItem.Content>
-                        </ListItem>
-
-                        <ListItem >
-                            <ListItem.Content>
-                                <ListItem.Title>提取码</ListItem.Title>
-                                <ListItem.Subtitle>{item.password}</ListItem.Subtitle>
-                            </ListItem.Content>
-                        </ListItem>
-
-                        <ListItem >
-                            <ListItem.Content>
-                                <ListItem.Title>是否允许评论</ListItem.Title>
-                                <ListItem.Subtitle>{item.isAllowComment ? '是' : '否'}</ListItem.Subtitle>
-                            </ListItem.Content>
-                        </ListItem>
-
-                        <View style={{ marginTop: 10 }}>
-                            <Button
-                                icon={
-                                    <Icon
-                                        name="attach-file"
-                                        size={15}
-                                        color="white"
-
-                                    />
-                                }
-                                title={isCopyLoaing ? '稍等...' : "复制链接"}
-                                onPress={() => handleClipboard(item)}
-                            />
-                        </View>
-                    </View>
-                </Overlay>
             </>
         )
     }
@@ -219,6 +178,49 @@ const SharerScreen = () => {
                     loadMore()
                 }}>
             </FlatList>
+            {/**overlay 显示具体信息 */}
+            <Overlay isVisible={isVisible} overlayStyle={{ padding: 30, width: '100%', height: '70%', position: 'absolute', bottom: 0 }} onBackdropPress={toggleOverlay}>
+                <View style={{ width: '100%' }}>
+
+                    <Card.Title><Text style={{ fontSize: 20 }}>{item?.filename}</Text></Card.Title>
+                    <ListItem >
+                        <ListItem.Content>
+                            <ListItem.Title>到期时间</ListItem.Title>
+                            <ListItem.Subtitle>{item?.expiredAt}</ListItem.Subtitle>
+                        </ListItem.Content>
+                    </ListItem>
+
+                    <ListItem >
+                        <ListItem.Content>
+                            <ListItem.Title>提取码</ListItem.Title>
+                            <ListItem.Subtitle>{item?.password}</ListItem.Subtitle>
+                        </ListItem.Content>
+                    </ListItem>
+
+                    <ListItem >
+                        <ListItem.Content>
+                            <ListItem.Title>是否允许评论</ListItem.Title>
+                            <ListItem.Subtitle>{item?.isAllowComment ? '是' : '否'}</ListItem.Subtitle>
+                        </ListItem.Content>
+                    </ListItem>
+
+                    <View style={{ marginTop: 10 }}>
+                        <Button
+                            disabled={isCopyLoading}
+                            icon={
+                                <Icon
+                                    name="attach-file"
+                                    size={15}
+                                    color="white"
+
+                                />
+                            }
+                            title={isCopyLoading ? '稍等...' : "复制链接"}
+                            onPress={() => handleClipboard(item)}
+                        />
+                    </View>
+                </View>
+            </Overlay>
         </>
     )
 

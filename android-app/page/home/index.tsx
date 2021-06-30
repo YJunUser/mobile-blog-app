@@ -1,13 +1,14 @@
 import React from 'react';
-import { ActivityIndicator, ScrollView, View } from 'react-native';
+import { ActivityIndicator, ScrollView, View, Text } from 'react-native';
 import { styles } from './style';
 import { UsingModal } from '../../components/modal/usingModal';
 import { fileParams } from '../../types/file';
 import { FileItem } from '../../components/FileItem';
 import { EditModal } from '../../components/modal/editModal';
 import { useCommonModal } from '../../utils/commonModal';
-import { Overlay } from 'react-native-elements';
+import { Button, Card, Overlay } from 'react-native-elements';
 import { SharerModal } from '../../components/modal/sharer';
+import { GetIcon } from '../../components/FileItem/file-icon';
 
 
 const HomeScreen = ({ navigation }: { navigation: any }) => {
@@ -16,7 +17,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
     fileStatus: 'unRecycled',
   }
 
-  const { renderRefreshControl, isLoading, fileDatas, select, setSelect, setVisible, visible, toggleOverlay, goFileScreen } = useCommonModal(fileParams, navigation)
+  const { renderRefreshControl, isLoading, fileDatas, select, setSelect, setVisible, visible, toggleOverlay, goFileScreen, fileModalVisible, setFileModalVisible, toggleFile, confirmDownload } = useCommonModal(fileParams, navigation)
 
 
   return (
@@ -29,7 +30,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
       {
         isLoading ? <ActivityIndicator size="large" color="#00ff00" /> : <View style={styles.fileContainer}>
           {
-            fileDatas ? fileDatas?.map((item) => <FileItem file={item} key={item.name} setSelect={setSelect} select={select} goFileScreen={goFileScreen}></FileItem>) : null
+            fileDatas?.map((item) => <FileItem file={item} key={item.name} setSelect={setSelect} select={select} goFileScreen={goFileScreen}></FileItem>)
           }
         </View>
       }
@@ -40,6 +41,24 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
       {/**分享的Overlay */}
       <Overlay isVisible={visible} onBackdropPress={toggleOverlay} overlayStyle={{ padding: 30, width: '100%', height: '70%', position: 'absolute', bottom: 0 }}>
         <SharerModal selectedFiles={select}></SharerModal>
+      </Overlay>
+      {/**显示文件信息的overlay */}
+      <Overlay isVisible={fileModalVisible} onBackdropPress={() => setFileModalVisible(false)} overlayStyle={{ padding: 30, width: '100%', height: '70%', position: 'absolute', bottom: 0 }}>
+        <Card>
+          <Card.Title style={{ fontSize: 30 }}>Sharer</Card.Title>
+          <Card.Divider />
+          <Text style={{ marginBottom: 10, textAlign: 'center' }}>
+            {toggleFile?.name}
+          </Text>
+          <Card.Title>
+            <GetIcon type={toggleFile?.type}></GetIcon>
+          </Card.Title>
+          <Button
+           
+            buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
+            title='下载'
+            onPress={() => confirmDownload(toggleFile)} />
+        </Card>
       </Overlay>
     </ScrollView >
 

@@ -35,7 +35,7 @@ const BottomTab = () => {
           let iconName: string;
           if (route.name === 'HomeScreen') {
             iconName = focused ? 'twitter' : 'twitter';
-          } else if (route.name === 'AboutScreen') {
+          } else if (route.name === 'ShareScreen') {
             iconName = focused ? 'vcard-o' : 'vcard-o';
           }
           // You can return any component that you like here!
@@ -47,7 +47,7 @@ const BottomTab = () => {
         inactiveTintColor: 'gray',
       }}>
       <Tab.Screen name="HomeScreen" component={HomeScreen} options={{ tabBarVisible: !isEdit, tabBarLabel: '文件'}} />
-      <Tab.Screen name="AboutScreen" component={AboutScreen} options={{ tabBarLabel: '关于'}}/>
+      <Tab.Screen name="ShareScreen" component={SharerScreen} options={{ tabBarLabel: '我的分享'}}/>
     </Tab.Navigator>
   );
 };
@@ -109,10 +109,10 @@ export const AndroidApp = () => {
                   })}
                 />
                 <Stack.Screen
-                  name='SharerScreen'
-                  component={SharerScreen}
+                  name='AboutScreen'
+                  component={AboutScreen}
                   options={({ route }) => ({
-                    headerTitle: () => <Text style={{ marginLeft: 100, fontWeight: 'bold' }}>我的分享</Text>,
+                    headerTitle: () => <Text style={{ marginLeft: 100, fontWeight: 'bold' }}>关于我们</Text>,
                     gestureDirection: 'horizontal', // 手势的方向
                     gestureEnabled: true, // 启用安卓的手势返回
                     cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS // 将ios翻页动画应用到安卓上

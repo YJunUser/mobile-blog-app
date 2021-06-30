@@ -17,7 +17,7 @@ interface EditModalProps {
 export const EditModal = (editProps: EditModalProps) => {
     const { selectedFiles, setSelect, isRecycle, setSharerVisible } = editProps
     const { isEdit } = useAuth()
-    const { editItemList, setName, folderName, toggleFolder, toggleFolderDone, toggleFolderQuit, isFolderVisible, renameLoading } = useEdit({ selectedFiles, setSelect, setSharerVisible })
+    const { editItemList, setName, folderName, toggleFolderDone, toggleFolderQuit, isFolderVisible, renameLoading } = useEdit({ selectedFiles, setSelect, setSharerVisible })
     const recycleItemList = useRecycle(selectedFiles, setSelect)
 
 

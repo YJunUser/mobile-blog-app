@@ -10,7 +10,7 @@ export const GetIcon = ({type} : {type: string}): JSX.Element => {
         case 'md':
             return (<Image source={require('../../assets/image/md.png')} style={{ width: 60, height: 60 }}></Image>)
         case 'pdf':
-            return (<Image source={require('../../assets/image/word.png')} style={{ width: 60, height: 60 }}></Image>)
+            return (<Image source={require('../../assets/image/pdf.png')} style={{ width: 60, height: 60 }}></Image>)
         case 'sound':
             return (<Image source={require('../../assets/image/sound.png')} style={{ width: 60, height: 60 }}></Image>)
         case 'txt':

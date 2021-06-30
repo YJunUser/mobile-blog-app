@@ -86,3 +86,11 @@ export const renameFile = (renameParam: RenameConfig) => {
         }
     })
 }
+
+export const saveArticle = (articleParam: { url: string }) => {
+    return http.request({
+        url: '/sharer-api/save-article',
+        method: 'post',
+        data: articleParam
+    })
+}

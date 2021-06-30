@@ -47,7 +47,7 @@ export const ModalComponent = (props: ModalComponentProps) => {
         </View>
 
         {
-          showTitle? <Text style={styles.title}>{title}</Text> : null
+          showTitle ? <Text style={styles.title}>{title}</Text> : null
         }
 
         <View style={ModalContentStyle ? ModalContentStyle : styles.modalContent}>

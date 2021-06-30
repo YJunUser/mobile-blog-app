@@ -1,26 +1,31 @@
 import React from 'react'
-import { TextInput, TouchableNativeFeedback, View, Text, StyleSheet } from 'react-native';
+import { TextInput, View, Text, StyleSheet, ActivityIndicator, ToastAndroid } from 'react-native';
 import { ModalComponent } from '.';
 import Icon from 'react-native-vector-icons/AntDesign';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
-import RNFileSelector from 'react-native-file-selector';
 import { useUsingModal } from './utils';
 import { useState } from 'react';
 import { useNewFolder } from '../../utils/file-item';
+import { Overlay } from 'react-native-elements/dist/overlay/Overlay';
+import { Button, Card, Input } from 'react-native-elements';
 
 export const UsingModal = ({ presentFolderId }: { presentFolderId: number }) => {
-  const { isModalVisible, toggleFileSelector, toggleFolder, toggleModal, list, isFileSelectorVisible, isFolderVisible, isEdit, SelectFileDone } = useUsingModal(presentFolderId)
+  const { isModalVisible, toggleFolder, toggleModal, list, isFolderVisible, isEdit, uploadLoading, saveVisible, setSaveVisible, url, setUrl, confirmSaveArticle, saveArticleLoading } = useUsingModal(presentFolderId)
   const [folderName, setName] = useState<string>('')
 
   const { mutateAsync, isLoading } = useNewFolder()
 
-
   const toggleFolderDone = async () => {
     try {
-      await mutateAsync({
-        folderName: folderName,
-        parentFolderId: presentFolderId
-      })
+      if(folderName) {
+        await mutateAsync({
+          folderName: folderName,
+          parentFolderId: presentFolderId
+        })
+      } else {
+        ToastAndroid.showWithGravity('文件夹必须有名字哦', ToastAndroid.SHORT, ToastAndroid.CENTER)
+      }
+ 
     } catch (error) {
       console.log(error)
     }
@@ -52,11 +57,23 @@ export const UsingModal = ({ presentFolderId }: { presentFolderId: number }) => 
       >
       </ModalComponent>
 
+      <Overlay isVisible={uploadLoading}>
+        <ActivityIndicator size="large" color="#00ff00" />
+      </Overlay>
 
+      <Overlay isVisible={saveVisible} style={{ width: '100%' }} onBackdropPress={() => { saveArticleLoading ? null : setSaveVisible(false) }}>
+        <Card containerStyle={{ width: 300, height: 200, padding: 20 }}>
+          <Card.Title>保存文章</Card.Title>
+          <Input placeholder='输入url' value={url} onChangeText={setUrl}></Input>
+          <Button
+            icon={<Icon name='save' color='#ffffff' size={16} />}
+            buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
+            title={saveArticleLoading ? '保存中...' : '确定'}
+            disabled={saveArticleLoading}
+            onPress={confirmSaveArticle} />
+        </Card>
+      </Overlay>
 
-      <RNFileSelector title={"选择文件"} visible={isFileSelectorVisible} path={'/storage/emulated/0'} closeMenu={true} onDone={async (selectPath) => {
-        SelectFileDone(selectPath)
-      }} onCancel={toggleFileSelector} />
 
       {
         isEdit ? null : <View style={styles.button}>
