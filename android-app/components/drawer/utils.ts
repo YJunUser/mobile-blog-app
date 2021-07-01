@@ -6,6 +6,14 @@ import * as RootNavigation from '../../RootNavigation'
 export const useMenu = () => {
     const { setOpen, logout, isOpen } = useAuth()
 
+    const confirmOut = () => {
+        setOpen(!isOpen)
+        // delay time and user can see it
+        setTimeout(() => {
+            logout()
+        }, 500);
+
+    }
     const goRecycle = () => {
         // close drawer first
         setOpen(!isOpen)
@@ -47,10 +55,7 @@ export const useMenu = () => {
         iconType: 'ant-design',
         iconColor: 'blue',
         size: 20,
-        handler: logout
+        handler: confirmOut
     }]
-    // useEffect(() => {
-    //     setOpen(false)
-    // }, [])
     return { list, setOpen, isOpen }
 }

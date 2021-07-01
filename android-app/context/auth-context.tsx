@@ -6,7 +6,6 @@ import FullPageError from '../components/FullPageActive/FullpageError';
 import FullPageLoading from '../components/FullPageActive/FullPageLoading';
 import { UserLogin, UserRegister } from '../types/auth';
 import { UserInfo } from '../types/user';
-import { useMount } from '../utils';
 import * as auth from '../utils/auth-control'
 
 interface ContextStore {
@@ -81,8 +80,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     })
   }
 
-  useMount(() => {
+  useEffect(() => {
+    console.log('mount')
     const bootstrapAsync = async () => {
+
       setLoading(true)
       try {
         //// Fetch the token from storage then navigate to our appropriate place
@@ -98,7 +99,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
     }
     bootstrapAsync()
-  })
+  }, [])
 
   // token变化后去拉取用户信息
   useEffect(() => {

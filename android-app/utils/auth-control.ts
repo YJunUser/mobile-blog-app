@@ -6,6 +6,7 @@ export const getToken = () => storage.load({
   key: StorageKey,
   autoSync: false
 }).then(ret => {
+  console.log(ret)
   return ret
 }).catch(err => {
   // 没有找到数据
@@ -17,7 +18,6 @@ export const saveToken = (token: string) => {
   storage.save({
     key: StorageKey,
     data: token,
-    expires: 1000 * 60 * 24
   })
 }
 

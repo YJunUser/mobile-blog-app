@@ -68,12 +68,12 @@ export const AndroidApp = () => {
   })
 
   return (
-    <>
-      {
-        token ? (
-          <Suspense fallback={<FullPageLoading></FullPageLoading>}>
-            <Drawer>
-              <Stack.Navigator>
+    (
+      <Suspense fallback={<FullPageLoading></FullPageLoading>}>
+        <Drawer>
+          <Stack.Navigator>
+            {
+              token ? <>
                 <Stack.Screen
                   name="TabScreen"
                   component={BottomTab}
@@ -123,32 +123,28 @@ export const AndroidApp = () => {
                     cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS // 将ios翻页动画应用到安卓上
                   })}
                 />
-              </Stack.Navigator>
-            </Drawer>
-          </Suspense>
-        ) : (<Suspense fallback={<FullPageLoading></FullPageLoading>}>
-          <Stack.Navigator mode={'modal'}>
-            <Stack.Screen
-              name="LoginScreen"
-              component={LoginScreen}
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name="RegisterScreen"
-              component={RegisterScreen}
-              options={{
-                headerTitle: props => (<></>),
-                gestureDirection: 'horizontal', // 手势的方向
-                gestureEnabled: true, // 启用安卓的手势返回
-                cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS // 将ios翻页动画应用到安卓上
-              }}
-            />
+              </> : (<><Stack.Screen
+                name="LoginScreen"
+                component={LoginScreen}
+                options={{
+                  headerShown: false
+                }}
+              />
+                <Stack.Screen
+                  name="RegisterScreen"
+                  component={RegisterScreen}
+                  options={{
+                    headerTitle: props => (<></>),
+                    gestureDirection: 'horizontal', // 手势的方向
+                    gestureEnabled: true, // 启用安卓的手势返回
+                    cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS // 将ios翻页动画应用到安卓上
+                  }}
+                /></>)
+            }
+
           </Stack.Navigator>
-        </Suspense>
-        )
-      }
-    </>
+        </Drawer>
+      </Suspense>
+    )
   )
 };
