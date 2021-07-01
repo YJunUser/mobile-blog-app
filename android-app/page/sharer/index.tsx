@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Alert, FlatList, Text, ToastAndroid, View } from "react-native"
 import { ListItem, Button, Overlay, Card } from "react-native-elements"
 import { useDeleteShares, useShares } from "../../utils/shares"
@@ -179,7 +179,7 @@ const SharerScreen = () => {
                 }}>
             </FlatList>
             {/**overlay 显示具体信息 */}
-            <Overlay isVisible={isVisible} overlayStyle={{ padding: 30, width: '100%', height: '70%', position: 'absolute', bottom: 0 }} onBackdropPress={toggleOverlay}>
+            <Overlay isVisible={isVisible} overlayStyle={{ padding: 30, width: '100%', height: '70%', position: 'absolute', bottom: 0 }} onBackdropPress={() => toggleOverlay(null)}>
                 <View style={{ width: '100%' }}>
 
                     <Card.Title><Text style={{ fontSize: 20 }}>{item?.filename}</Text></Card.Title>
