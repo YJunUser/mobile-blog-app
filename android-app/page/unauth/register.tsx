@@ -43,7 +43,6 @@ const RegisterScreen = () => {
       setError(error)
     }
     setLoading(false)
-    setError(null)
   }
 
   const handleIdentifyingCode = async () => {
@@ -57,10 +56,11 @@ const RegisterScreen = () => {
 
   return <View style={styles.container}>
     <View style={styles.main}>
-      {
-        error ? <Text h4 style={{color: 'red'}}>{error}</Text> : null
-      }
+   
       <Text h4 style={{ marginBottom: 10 }}>新用户注册</Text>
+      {
+        error ? <Text style={{color: 'red'}} >{error}</Text> : null
+      }
       <Input
         placeholder='请输入昵称'
         leftIcon={{ type: 'ant-design', name: 'user' }}

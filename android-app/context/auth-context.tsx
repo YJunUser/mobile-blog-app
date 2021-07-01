@@ -40,10 +40,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isDrawer, setDrawer] = useState<boolean>(true)
 
   const login = (params: UserLogin) => {
-    return userLogin(params).then(res => {
+    return userLogin(params).then(async (res) => {
       const token: string = res.data.data.token
       // 存入token
-      auth.saveToken(token)
+      await auth.saveToken(token)
       setToken(token)
       return res
     }).catch(error => {

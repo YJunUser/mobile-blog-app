@@ -59,7 +59,7 @@ const ProfileScreen = () => {
         <ListItem.Content>
           <View style={[baseStyles.row, styles.content]}>
             <Text>昵称</Text>
-            <Text>{user.nickname}</Text>
+            <Text>{user?.nickname}</Text>
           </View>
         </ListItem.Content>
         <ListItem.Chevron size={28}></ListItem.Chevron>

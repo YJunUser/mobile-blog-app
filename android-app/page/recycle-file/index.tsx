@@ -2,7 +2,7 @@ import React from 'react'
 import { ActivityIndicator, ScrollView, View, Text } from 'react-native'
 
 import { styles } from './style'
-import {  fileParams } from '../../types/file';
+import { fileParams } from '../../types/file';
 
 import { FileItem } from '../../components/FileItem'
 import { EditModal } from '../../components/modal/editModal'

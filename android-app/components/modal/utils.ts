@@ -29,30 +29,39 @@ export const useEdit = (props: EditModalProps) => {
     const { mutateAsync: renameAsync, isLoading: renameLoading } = useRenameFiles()
     const { setEdit } = useAuth()
     const confirmDelete = () => {
-        Alert.alert('确认删除吗', '删除后可以在回收站中找到',
-            [
-                {
-                    text: "取消",
-                },
-                {
-                    text: "确认", onPress: () => {
-                        setSelect([])
-                        selectedFiles.forEach(async (item) => {
-                            await mutateAsync({
-                                id: item.id,
-                                isDirectory: item.isDirectory
+        if (selectedFiles.length === 0) {
+            ToastAndroid.showWithGravity('请至少选择一个文件', ToastAndroid.LONG, ToastAndroid.CENTER)
+        } else {
+            Alert.alert('确认删除吗', '删除后可以在回收站中找到',
+                [
+                    {
+                        text: "取消",
+                    },
+                    {
+                        text: "确认", onPress: () => {
+
+                            setSelect([])
+                            selectedFiles.forEach(async (item) => {
+                                await mutateAsync({
+                                    id: item.id,
+                                    isDirectory: item.isDirectory
+                                })
                             })
-                        })
-                        ToastAndroid.showWithGravity('删除成功', ToastAndroid.LONG, ToastAndroid.CENTER)
-                    }
-                },
-            ]
-        );
-        setEdit(false)
+                            ToastAndroid.showWithGravity('删除成功', ToastAndroid.LONG, ToastAndroid.CENTER)
+                            setEdit(false)
+                        }
+                    },
+                ]
+            );
+        }
+
+
     }
     const confirmSharer = () => {
         if (selectedFiles.length > 1) {
             ToastAndroid.showWithGravity('一次只能分享一个文件哦', ToastAndroid.SHORT, ToastAndroid.CENTER)
+        } else if (selectedFiles.length === 0) {
+            ToastAndroid.showWithGravity('请选择一个文件', ToastAndroid.SHORT, ToastAndroid.CENTER)
         } else {
             setSharerVisible(true)
         }
@@ -66,13 +75,13 @@ export const useEdit = (props: EditModalProps) => {
     const confirmDownload = async () => {
         if (selectedFiles.length > 1) {
             ToastAndroid.showWithGravity('一次只能下载一个文件哦', ToastAndroid.SHORT, ToastAndroid.CENTER)
+        } else if (selectedFiles.length === 0) {
+            ToastAndroid.showWithGravity('请选择一个文件', ToastAndroid.SHORT, ToastAndroid.CENTER)
         } else {
             try {
                 const res = await getFileDownLoadUrl(selectedFiles[0].id)
                 const { url } = res.data.data
                 goWeb(url)
-                // Clipboard.setString(url)
-                // ToastAndroid.showWithGravity('下载链接已复制到粘贴板', ToastAndroid.SHORT, ToastAndroid.CENTER)
             } catch (error) {
                 ToastAndroid.showWithGravity(error, ToastAndroid.SHORT, ToastAndroid.CENTER)
             }
@@ -81,10 +90,10 @@ export const useEdit = (props: EditModalProps) => {
     }
 
     const confirmRename = () => {
-        // ToastAndroid.showWithGravity('重命名功能升级中,敬请期待', ToastAndroid.SHORT, ToastAndroid.TOP)
-        console.log(selectedFiles)
         if (selectedFiles.length > 1) {
             ToastAndroid.showWithGravity('一次只能重命名一个文件', ToastAndroid.SHORT, ToastAndroid.CENTER)
+        } else if (selectedFiles.length === 0) {
+            ToastAndroid.showWithGravity('请选择一个文件', ToastAndroid.SHORT, ToastAndroid.CENTER)
         } else {
             toggleFolder()
         }
@@ -156,27 +165,34 @@ export const useEdit = (props: EditModalProps) => {
 export const useRecycle = (selectedFiles: fileData[], setSelect: (selectFiles: fileData[]) => void) => {
     const { mutateAsync: recoveryAsync } = useRecoveryFiles()
     const { mutateAsync: deleteAsync } = useDeleteFiles()
+    const { setEdit } = useAuth()
     const confirmDelete = () => {
-        Alert.alert('确认清空吗', '清空后不可找回',
-            [
-                {
-                    text: "取消",
-                },
-                {
-                    text: "确认", onPress: () => {
-                        setSelect([])
-                        selectedFiles.forEach(async (item) => {
-                            await deleteAsync({
-                                id: item.id,
-                                isDirectory: item.isDirectory
-                            })
-                        })
-                        ToastAndroid.showWithGravity('删除成功', ToastAndroid.LONG, ToastAndroid.CENTER)
+        if (selectedFiles.length === 0) {
+            ToastAndroid.showWithGravity('请至少选择一个文件', ToastAndroid.SHORT, ToastAndroid.CENTER)
+        } else {
+            Alert.alert('确认清空吗', '清空后不可找回',
+                [
+                    {
+                        text: "取消",
+                    },
+                    {
+                        text: "确认", onPress: () => {
 
-                    }
-                },
-            ]
-        );
+                            setSelect([])
+                            selectedFiles.forEach(async (item) => {
+                                await deleteAsync({
+                                    id: item.id,
+                                    isDirectory: item.isDirectory
+                                })
+                            })
+                            ToastAndroid.showWithGravity('删除成功', ToastAndroid.LONG, ToastAndroid.CENTER)
+                            setEdit(false)
+                        }
+                    },
+                ]
+            );
+        }
+
     }
     const confirmRecovery = () => {
         Alert.alert('确认恢复吗', '恢复后可在主页中找到',
@@ -186,14 +202,19 @@ export const useRecycle = (selectedFiles: fileData[], setSelect: (selectFiles: f
                 },
                 {
                     text: "确认", onPress: () => {
-                        setSelect([])
-                        selectedFiles.forEach(async (item) => {
-                            await recoveryAsync({
-                                id: item.id,
-                                isDirectory: item.isDirectory
+                        if (selectedFiles.length === 0) {
+                            ToastAndroid.showWithGravity('请至少选择一个文件', ToastAndroid.SHORT, ToastAndroid.CENTER)
+                        } else {
+                            setSelect([])
+                            selectedFiles.forEach(async (item) => {
+                                await recoveryAsync({
+                                    id: item.id,
+                                    isDirectory: item.isDirectory
+                                })
                             })
-                        })
-                        ToastAndroid.showWithGravity('恢复成功', ToastAndroid.LONG, ToastAndroid.CENTER)
+                            ToastAndroid.showWithGravity('恢复成功', ToastAndroid.LONG, ToastAndroid.CENTER)
+                        }
+
                     }
                 },
             ]
@@ -270,7 +291,6 @@ export const useUsingModal = (presentFolderId: number) => {
             const name = arr[arr.length - 1]
 
             RNFS.readFile(path, 'base64').then(data => {
-                console.log(data)
                 SelectFileDone(path, name, data)
             })
 
@@ -285,7 +305,6 @@ export const useUsingModal = (presentFolderId: number) => {
                 type: [DocumentPicker.types.images],
             });
             RNFS.readFile(res.uri, 'base64').then(data => {
-                console.log(data)
                 SelectFileDone(res.uri, res.name, data)
             })
         } catch (err) {
@@ -315,16 +334,15 @@ export const useUsingModal = (presentFolderId: number) => {
                 }),
                 'Content-Type': 'application/octet-stream',
             }, data)
-                .then((res) => {
-                    console.log(res.text())
+                .then(async () => {
+                    await saveFileAsync(uploadCode)
+                    setUploadLoading(false)
+                    ToastAndroid.showWithGravity('上传成功', ToastAndroid.SHORT, ToastAndroid.CENTER)
                 })
                 .catch((err) => {
                     console.log(err)
+                    setUploadLoading(false)
                 })
-
-            await saveFileAsync(uploadCode)
-            setUploadLoading(false)
-            ToastAndroid.showWithGravity('上传成功', ToastAndroid.SHORT, ToastAndroid.CENTER)
 
         } catch (error) {
             ToastAndroid.showWithGravity(error, ToastAndroid.SHORT, ToastAndroid.CENTER)

@@ -11,14 +11,16 @@ export const styles = StyleSheet.create({
   rightCom: {
     position: 'absolute',
     right: 10,
-    top: 18
+    top: 18,
   },
   leftCom: {
     position: 'absolute',
     left: 10,
-    top: 18
+    top: 18,
   },
   title: {
+    fontSize: 20,
+    top: 5,
     textAlign: 'center',
     fontWeight: 'bold'
   },

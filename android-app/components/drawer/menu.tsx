@@ -47,7 +47,7 @@ export const Menu = (): JSX.Element => {
       </View>
 
       <View style={styles.main}>
-        <Text style={styles.paragraph}>姚伯骏</Text>
+        <Text style={styles.paragraph}>{user?.nickname}</Text>
         {
           list.map((item, index) => (
             <ListItem key={index} containerStyle={{ backgroundColor: '#000000', margin: 10, padding: 0, marginLeft: 0, }} onPress={item.handler}>

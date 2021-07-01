@@ -17,7 +17,7 @@ export const UsingModal = ({ presentFolderId }: { presentFolderId: number }) => 
 
   const toggleFolderDone = async () => {
     try {
-      if(folderName) {
+      if (folderName) {
         await mutateAsync({
           folderName: folderName,
           parentFolderId: presentFolderId
@@ -25,7 +25,7 @@ export const UsingModal = ({ presentFolderId }: { presentFolderId: number }) => 
       } else {
         ToastAndroid.showWithGravity('文件夹必须有名字哦', ToastAndroid.SHORT, ToastAndroid.CENTER)
       }
- 
+
     } catch (error) {
       console.log(error)
     }
@@ -46,8 +46,13 @@ export const UsingModal = ({ presentFolderId }: { presentFolderId: number }) => 
         isVisible={isFolderVisible}
         toggleModal={null}
         ModalStyle={styles.folderModal}
-        rightTopChildren={<Text style={{ color: '#6a5acd', fontWeight: 'bold' }} onPress={isLoading ? null : toggleFolderDone}>{isLoading ? '稍等...' : '完成'}</Text>}
-        leftTopChildren={<Text style={{ color: '#000000' }} onPress={toggleFolderQuit}>取消</Text>}
+        // rightTopChildren={<Text style={{ color: '#6a5acd', fontWeight: 'bold', backgroundColor: 'red', textAlign: 'center', width: 40 }}
+        //   onPress={isLoading ? null : toggleFolderDone}>
+        //   {isLoading ? '稍等...' : '完成'}
+        // </Text>}
+        rightTopChildren={<Button type='clear' onPress={isLoading ? null : toggleFolderDone} title={isLoading ? '稍等...' : '完成'}></Button>}
+        // leftTopChildren={<Text style={{ color: '#000000' }} onPress={toggleFolderQuit}>取消</Text>}
+        leftTopChildren={<Button type='clear' onPress={toggleFolderQuit} title='取消' titleStyle={{color: '#000000'}}></Button>}
         contentChildren={
           <View style={styles.folderModalContent}>
             <EntypoIcon name='folder' size={150} color={'#6495ed'}></EntypoIcon>
@@ -66,6 +71,7 @@ export const UsingModal = ({ presentFolderId }: { presentFolderId: number }) => 
           <Card.Title>保存文章</Card.Title>
           <Input placeholder='输入url' value={url} onChangeText={setUrl}></Input>
           <Button
+
             icon={<Icon name='save' color='#ffffff' size={16} />}
             buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
             title={saveArticleLoading ? '保存中...' : '确定'}

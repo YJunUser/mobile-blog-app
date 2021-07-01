@@ -17,6 +17,7 @@ import HomeScreen from './page/home';
 import LoginScreen from './page/unauth/login';
 import RegisterScreen from './page/unauth/register';
 import SharerScreen from './page/sharer';
+import { BackHandler } from 'react-native';
 
 
 
@@ -46,8 +47,8 @@ const BottomTab = () => {
         activeTintColor: '#6495ed',
         inactiveTintColor: 'gray',
       }}>
-      <Tab.Screen name="HomeScreen" component={HomeScreen} options={{ tabBarVisible: !isEdit, tabBarLabel: '文件'}} />
-      <Tab.Screen name="ShareScreen" component={SharerScreen} options={{ tabBarLabel: '我的分享'}}/>
+      <Tab.Screen name="HomeScreen" component={HomeScreen} options={{ tabBarVisible: !isEdit, tabBarLabel: '文件' }} />
+      <Tab.Screen name="ShareScreen" component={SharerScreen} options={{ tabBarLabel: '我的分享' }} />
     </Tab.Navigator>
   );
 };
@@ -61,6 +62,10 @@ const Stack = createStackNavigator(
 
 export const AndroidApp = () => {
   const { token, isEdit, setEdit } = useAuth()
+  BackHandler.addEventListener('hardwareBackPress', () => {
+    setEdit(false)
+    return true
+  })
 
   return (
     <>

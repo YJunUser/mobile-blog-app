@@ -62,7 +62,7 @@ export const SharerModal = ({ selectedFiles }: { selectedFiles: fileData[]; }) =
         console.log(file.id)
 
         try {
-            const res = await mutateAsync({ contentId: file.id, expiredIn: days ? days : null, isAllowComment: isAllowComment, password: code, shareType: getSharerType(file.type) })
+            const res = await mutateAsync({ contentId: file.id, expiredIn: days ? days : null, isAllowComment: isAllowComment, password: code ? code : null, shareType: getSharerType(file.type) })
             const { url } = res
             Clipboard.setString(url)
             ToastAndroid.showWithGravity('已复制到剪切板', ToastAndroid.SHORT, ToastAndroid.CENTER)

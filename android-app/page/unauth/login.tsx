@@ -42,11 +42,11 @@ const LoginScreen = () => {
     setLoading(true)
     try {
       await login(values);
+      setError(null)
     } catch (error) {
       setError(error)
     }
     setLoading(false)
-    setError(null)
   }
 
   return <View style={styles.container}>

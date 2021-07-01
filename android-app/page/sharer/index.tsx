@@ -53,14 +53,14 @@ const SharerScreen = () => {
     const [isCopyLoading, setCopyLoading] = useState<boolean>(false)
     const [item, setItem] = useState(null)
 
-    const toggleOverlay = () => {
+    const toggleOverlay = (item: sharesItem) => {
         setVisible(!isVisible);
+        setItem(item)
     };
 
     useEffect(() => {
         setRecords(shares?.records)
     }, [shares])
-    // console.log(records)
 
     const refreshControl = () => {
         setRefresh(true)
@@ -121,7 +121,7 @@ const SharerScreen = () => {
 
             <>
                 <ListItem.Swipeable
-
+                    onPress={() => toggleOverlay(item)}
                     leftContent={
                         <Button
                             title="详细信息"
@@ -145,7 +145,7 @@ const SharerScreen = () => {
                         <ListItem.Title>{item.filename}</ListItem.Title>
                         <ListItem.Subtitle>{item.expiredAt}</ListItem.Subtitle>
                     </ListItem.Content>
-                    <ListItem.Chevron onPress={() => toggleOverlay()} />
+                    <ListItem.Chevron />
                 </ListItem.Swipeable>
             </>
         )
@@ -186,14 +186,14 @@ const SharerScreen = () => {
                     <ListItem >
                         <ListItem.Content>
                             <ListItem.Title>到期时间</ListItem.Title>
-                            <ListItem.Subtitle>{item?.expiredAt}</ListItem.Subtitle>
+                            <ListItem.Subtitle>{item?.expiredAt ? item.expiredAt : '永久'}</ListItem.Subtitle>
                         </ListItem.Content>
                     </ListItem>
 
                     <ListItem >
                         <ListItem.Content>
                             <ListItem.Title>提取码</ListItem.Title>
-                            <ListItem.Subtitle>{item?.password}</ListItem.Subtitle>
+                            <ListItem.Subtitle>{item?.password ? item.password : '无'}</ListItem.Subtitle>
                         </ListItem.Content>
                     </ListItem>
 
